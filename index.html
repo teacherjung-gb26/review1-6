@@ -131,15 +131,15 @@
             
             <!-- Escape Stats Header -->
             <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 pb-4 mb-6 gap-3">
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2">
                     <div class="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-bold text-amber-300 flex items-center gap-1.5 animate-pulse">
                         <i class="fa-solid fa-shuffle"></i>
                         <span>뒤섞인 1학기 총복습 (18문항)</span>
                     </div>
-                    <div>
-                        <h3 class="text-sm md:text-base font-bold text-slate-200">
-                            교실의 무작위 영어 암호 단서 해독 중...
-                        </h3>
+                    <!-- Student unique personalized frequency channel to prevent copying -->
+                    <div class="bg-indigo-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-bold text-indigo-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-wave-square"></i>
+                        <span id="unique-channel-tag">채널: 접속 대기 중</span>
                     </div>
                 </div>
                 
@@ -766,6 +766,10 @@
 
             // Generate Master Password for this session (Unique 6 alphanumeric digits)
             generateRandomMasterCode();
+
+            // Create a personalized unique decryption frequency to clearly show each room is different
+            const randomFrequency = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('unique-channel-tag').innerText = `고유 암호 주파수: CH-${studentName}-${randomFrequency}`;
 
             // Prepare 18 Randomized Questions from the 24 questions pool
             let tempPool = [...ALL_QUESTIONS_POOL];
