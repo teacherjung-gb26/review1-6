@@ -100,7 +100,7 @@
                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">
                     불이 꺼진 마법의 영어 교실에 갇혔습니다! <br>
                     교실을 탈출하기 위해선 1학기 전 범위에서 꼬여서 출현하는 <br>
-                    <strong class="text-emerald-400">18개의 단서 문제</strong>를 풀고, <br>
+                    <strong class="text-emerald-400">24개의 단서 문제</strong>를 풀고, <br>
                     6자리의 마스터 패스워드를 획득하여 문을 열어야 합니다!
                 </p>
             </div>
@@ -168,7 +168,7 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-bold text-amber-300 flex items-center gap-1.5 animate-pulse">
                         <i class="fa-solid fa-shuffle"></i>
-                        <span>뒤섞인 1학기 총복습 (18문항)</span>
+                        <span>뒤섞인 1학기 총복습 (24문항)</span>
                     </div>
                     <!-- Student unique personalized frequency channel to prevent copying -->
                     <div class="bg-indigo-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-bold text-indigo-300 flex items-center gap-1.5">
@@ -181,7 +181,7 @@
                     <!-- Progress meter -->
                     <div class="text-right">
                         <span class="text-[10px] text-slate-400 block font-semibold uppercase">암호 단서 수집 상황</span>
-                        <span id="quiz-progress-text" class="text-xs font-mono font-bold text-emerald-400">01 / 18 해결</span>
+                        <span id="quiz-progress-text" class="text-xs font-mono font-bold text-emerald-400">01 / 24 해결</span>
                     </div>
                     <!-- Heart HP Bar -->
                     <div class="flex gap-1" id="hearts-container">
@@ -245,7 +245,7 @@
                             </div>
                         </div>
                         <p class="text-[9px] text-slate-500 text-center mt-2 leading-relaxed">
-                            * 무작위 영어 암호를 <strong class="text-amber-400">3개 해결할 때마다</strong><br>탈출 암호문 조각이 하나씩 선명하게 복원됩니다!
+                            * 무작위 영어 암호를 <strong class="text-amber-400">4개 해결할 때마다</strong><br>탈출 암호문 조각이 하나씩 선명하게 복원됩니다!
                         </p>
                     </div>
 
@@ -352,7 +352,7 @@
                     </div>
 
                     <p class="text-xs md:text-sm pt-4 leading-relaxed">
-                        위 학생은 불 꺼진 영어 교실에 갇혔음에도 불구하고, 뛰어난 영어 지능과 끈기 있는 탐구심으로 <strong class="text-white">1~6단원 범위의 18개 심화 영어 문제</strong>를 해결하여 최종 비밀 암호를 해독하였으며, 이에 본 영예의 방탈출 수료증을 수여합니다.
+                        위 학생은 불 꺼진 영어 교실에 갇혔음에도 불구하고, 뛰어난 영어 지능과 끈기 있는 탐구심으로 <strong class="text-white">1~6단원 범위의 24개 심화 영어 문제</strong>를 해결하여 최종 비밀 암호를 해독하였으며, 이에 본 영예의 방탈출 수료증을 수여합니다.
                     </p>
                 </div>
 
@@ -707,83 +707,7 @@
     </script>
 
     <script>
-        /* SOUND SYNTHESIZER using Web Audio API to prevent resource failure */
-        let audioCtx = null;
-        let isSoundEnabled = true;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playSynthSound(freqs, duration, type = 'sine') {
-            if (!isSoundEnabled) return;
-            initAudio();
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = type;
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            const now = audioCtx.currentTime;
-            
-            if (Array.isArray(freqs)) {
-                let startTime = now;
-                freqs.forEach((f, idx) => {
-                    const noteDuration = duration / freqs.length;
-                    osc.frequency.setValueAtTime(f, startTime);
-                    startTime += noteDuration;
-                });
-            } else {
-                osc.frequency.setValueAtTime(freqs, now);
-            }
-            
-            gain.gain.setValueAtTime(0.12, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
-            
-            osc.start(now);
-            osc.stop(now + duration);
-        }
-
-        // Custom Sound Effects Presets
-        function playSuccessSound() {
-            playSynthSound([523.25, 659.25, 783.99, 1046.50], 0.35, 'triangle');
-        }
-
-        function playFailSound() {
-            playSynthSound([180.00, 150.00], 0.3, 'sawtooth');
-        }
-
-        function playClickSound() {
-            playSynthSound(450, 0.05, 'sine');
-        }
-
-        function playLevelUpSound() {
-            playSynthSound([523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98], 0.7, 'sine');
-        }
-
-        function playCodeRevealSound() {
-            playSynthSound([880.00, 987.77, 1046.50], 0.25, 'triangle');
-        }
-
-        function toggleSound() {
-            isSoundEnabled = !isSoundEnabled;
-            const icon = document.getElementById('sound-icon');
-            if (isSoundEnabled) {
-                icon.className = 'fa-solid fa-volume-high';
-                playClickSound();
-            } else {
-                icon.className = 'fa-solid fa-volume-xmark';
-            }
-        }
-
-        /* 24 INTEGRATED CURRICULUM QUESTIONS (4 Questions per Lesson) */
+        /* 24 INTEGRATED CURRICULUM QUESTIONS (Exactly 4 practical Questions per Lesson, No Grammar rules) */
         const ALL_QUESTIONS_POOL = [
             // LESSON 1: What Grade Are You In? (Questions 1-4)
             {
@@ -822,15 +746,15 @@
                 lessonId: 1,
                 lessonTag: "LESSON 1",
                 type: "choice",
-                question: "서수 표현(Ordinal Numbers) 중 철자가 완벽하게 바른 것을 골라 자물쇠를 푸세요.",
+                question: "새로운 전학생 에밀리가 수줍게 말합니다. \"I'm in the fifth grade.\" 이 말의 뜻으로 가장 올바른 상황은 무엇인가요?",
                 options: [
-                    "1st - oneth",
-                    "2nd - twoth",
-                    "3rd - third",
-                    "6th - sixt"
+                    "나는 다섯 시에 학교에 가.",
+                    "나는 5학년이야.",
+                    "나는 다섯 명의 친구가 있어.",
+                    "나는 5층에 살고 있어."
                 ],
-                correctIndex: 2,
-                hint: "첫 번째는 first, 두 번째는 second, 세 번째는 third, 여섯 번째는 sixth가 올바른 서수 표현이란다."
+                correctIndex: 1,
+                hint: "학년을 나타내는 'fifth grade'의 뜻과 서수 'fifth'가 몇 번째인지 떠올려보려무나!"
             },
 
             // LESSON 2: I Have a Cold (Questions 5-8)
@@ -1013,15 +937,15 @@
                 lessonId: 5,
                 lessonTag: "LESSON 5",
                 type: "choice",
-                question: "미래 계획 표현 중 'be going to' 뒤에 오는 동사의 형태에 대해 정확히 알고 있는 스마트한 친구는 누구인가요?",
+                question: "내일 날씨가 아주 맑아서 공원에서 자전거를 탈 계획을 세우고 있는 민수의 표현으로 가장 적절한 대답을 고르세요.",
                 options: [
-                    "지민: 'be going to' 다음에는 항상 동사의 과거형을 써야 해.",
-                    "민수: 'be going to' 다음에는 아무것도 안 오고 마침표를 찍어.",
-                    "선아: 'be going to' 다음에는 원래의 깨끗한 형태인 '동사 원형'이 와야 해.",
-                    "유진: 'be going to' 다음에는 동사에 -ing를 또 붙여야 해."
+                    "I'm going to ride my bike in the park.",
+                    "I have a sore throat.",
+                    "I'm in the sixth grade.",
+                    "The bike is faster than the car."
                 ],
-                correctIndex: 2,
-                hint: "~할 계획이다의 'be going to' 뒤에는 play, watch, see 처럼 원래 모양인 '동사 원형'이 와서 뒤를 받쳐준단다."
+                correctIndex: 0,
+                hint: "~할 계획이다의 'be going to'와 '자전거 타다(ride my bike)'가 자연스럽게 결합된 미래형 다짐 문장을 골라보렴!"
             },
 
             // LESSON 6: Which Is Bigger? (Questions 21-24)
@@ -1038,15 +962,15 @@
                 lessonId: 6,
                 lessonTag: "LESSON 6",
                 type: "choice",
-                question: "다음 무게나 상태를 비교하는 영단어 비교급 표현 중 단어 스펠링(철자) 규칙에 완벽히 합치하는 정답은?",
+                question: "하늘을 나는 비행기(airplane)와 철로 위의 기차(train)의 속도를 올바르게 비교하고자 합니다. 빈칸에 들어갈 알맞은 낱말을 고르세요.\n\"The airplane is ________ than the train.\"",
                 options: [
-                    "heavy -> heavyer",
-                    "big -> biger",
-                    "heavy -> heavier",
-                    "tall -> more tall"
+                    "faster",
+                    "fastest",
+                    "heavy",
+                    "slower"
                 ],
-                correctIndex: 2,
-                hint: "y로 끝나는 단어 'heavy'는 y를 'i'로 교체하고 'er'을 이어 붙여 'heavier'로 바르게 탈바꿈하는 규칙을 지녀!"
+                correctIndex: 0,
+                hint: "비행기는 기차보다 '더 빠르다'라는 의미가 되어야 하므로, 빠르다(fast)에 더함을 뜻하는 비교형 어미(-er)가 붙은 단어를 선택하렴."
             },
             {
                 lessonId: 6,
@@ -1154,10 +1078,9 @@
             const randomFrequency = Math.floor(1000 + Math.random() * 9000);
             document.getElementById('unique-channel-tag').innerText = `주파수: CH-${studentClass}반-${studentNumber}번-${randomFrequency}`;
 
-            // Prepare 18 Randomized Questions from the 24 questions pool
             let tempPool = [...ALL_QUESTIONS_POOL];
             shuffleArray(tempPool);
-            shuffledQuestions = tempPool.slice(0, 18); // Select exactly 18 questions for the long play
+            shuffledQuestions = tempPool.slice(0, 24); // Select all 24 questions for the full 15-minute course
 
             // Reset States
             currentActiveIndex = 0;
@@ -1251,8 +1174,8 @@
         function loadActiveQuestion() {
             const quiz = shuffledQuestions[currentActiveIndex];
             
-            // Progress Bar text (up to 18)
-            document.getElementById('quiz-progress-text').innerText = `${currentActiveIndex + 1} / 18 단서 해결`;
+            // Progress Bar text (up to 24)
+            document.getElementById('quiz-progress-text').innerText = `${currentActiveIndex + 1} / 24 단서 해결`;
 
             renderLives();
             hideFeedbackBanner();
@@ -1535,8 +1458,8 @@
             bubble.innerText = rewards[Math.floor(Math.random() * rewards.length)];
 
             // Evaluate Password Portion Unlocks
-            // Since there are 18 questions, every 3 correct solves unlocks 1 digit
-            const groupsSolved = Math.floor((currentActiveIndex + 1) / 3);
+            // Since there are 24 questions, every 4 correct solves unlocks 1 digit (24 / 6 = 4)
+            const groupsSolved = Math.floor((currentActiveIndex + 1) / 4);
             for (let i = 0; i < groupsSolved; i++) {
                 if (unlockedCodeSlots[i] === "-") {
                     unlockedCodeSlots[i] = generatedMasterCode.charAt(i);
@@ -1554,7 +1477,7 @@
                     currentActiveIndex++;
                     loadActiveQuestion();
                 } else {
-                    // ALL 18 PROBLEMS CLEAR - Go to keypad terminal
+                    // ALL 24 PROBLEMS CLEAR - Go to keypad terminal
                     stopTimer();
                     goToMasterKeypadRoom();
                 }
