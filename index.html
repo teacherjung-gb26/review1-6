@@ -3,31 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마법의 영어교실 방탈출 - 6학년 1학기 총복습</title>
-    <!-- Tailwind CSS for high-fidelity interactive elements -->
+    <title>마법의 영어 교실 방탈출 (The Magical Classroom Escape)</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Playful & Elegant Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nanum+Gothic:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome icons for rich gamified graphics -->
+    <!-- FontAwesome for Premium Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chasu&family=Jua&family=Nanum+Gothic:wght@400;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Nanum Gothic', sans-serif;
             background-color: #0b0f19;
-            color: #f1f5f9;
         }
-        .font-game-title {
-            font-family: 'Fredoka One', 'Noto Sans KR', sans-serif;
+        .font-game {
+            font-family: 'Jua', sans-serif;
         }
-        /* Lockpad glowing effect */
-        .neon-glow {
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        .font-digital {
+            font-family: 'Orbitron', sans-serif;
         }
-        .neon-text {
-            text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+        /* Glow effects for Escape Room atmosphere */
+        .neon-border-green {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), inset 0 0 10px rgba(16, 185, 129, 0.1);
         }
-        /* Custom scrollbar for mystery vibe */
+        .neon-text-green {
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+        .neon-border-blue {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3), inset 0 0 10px rgba(59, 130, 246, 0.1);
+        }
+        .neon-border-gold {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3), inset 0 0 10px rgba(245, 158, 11, 0.1);
+        }
+        /* Custom Scrollbar for rankings */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -39,402 +48,364 @@
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
+            background: #4b5563;
         }
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(0.98); }
-        }
-        .animate-pulse-slow {
-            animation: pulse-slow 3s infinite;
+        /* Certificate Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden antialiased select-none">
+<body class="text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-emerald-500 selection:text-slate-900">
 
-    <!-- Confetti layer for victory celebrate -->
-    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full hidden"></canvas>
-
-    <!-- Escape Room Navigation Bar -->
-    <header class="bg-slate-900 border-b border-emerald-500/30 text-white shadow-xl py-3 px-6 sticky top-0 z-30 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="bg-emerald-500/20 p-2 rounded-xl border border-emerald-500 shadow-inner animate-pulse">
-                <i class="fa-solid fa-key text-emerald-400 text-lg"></i>
+    <!-- Top Glow Header -->
+    <header class="bg-slate-950/80 backdrop-blur-md border-b border-slate-900 sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/30">
+                    <i class="fa-solid fa-key text-emerald-400 text-lg animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-emerald-400 font-game text-xl tracking-wide flex items-center gap-2">
+                        마법의 영어 교실 방탈출 <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/30">Chunjae 6th</span>
+                    </h1>
+                    <p class="text-[10px] text-slate-400">천재교과서(김태은) 1~6단원 종합 스페셜 미션</p>
+                </div>
             </div>
-            <div>
-                <h1 class="text-sm md:text-xl font-bold tracking-wider font-game-title text-emerald-400">THE SHUFFLED MAGIC ENGLISH CLASSROOM ESCAPE</h1>
-                <p class="text-[10px] text-slate-400 hidden sm:block">천재교과서 (김태은) 1학기 1~6단원 집중 강화 총복습 방탈출</p>
+            <!-- Audio Controller & Realtime Status Badge -->
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleSound()" class="p-2 bg-slate-900 rounded-lg border border-slate-800 hover:bg-slate-800 transition" title="배경음 및 효과음">
+                    <i id="sound-icon" class="fa-solid fa-volume-high text-emerald-400"></i>
+                </button>
+                <div id="live-channel-badge" class="hidden md:flex items-center bg-blue-950/50 border border-blue-500/30 px-3 py-1.5 rounded-lg text-xs space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+                    <span class="text-blue-300 font-digital" id="user-channel-id">CH-CONNECTING</span>
+                </div>
             </div>
-        </div>
-        
-        <div class="flex items-center gap-4">
-            <!-- Game Active Timer -->
-            <div id="game-timer-badge" class="hidden bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-xs font-mono font-bold text-amber-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-stopwatch animate-spin-slow"></i>
-                <span id="elapsed-time-text">00:00</span>
-            </div>
-
-            <!-- Live Status Board Button -->
-            <button onclick="openLeaderboard()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-400 transition-all flex items-center gap-1.5 shadow">
-                <i class="fa-solid fa-chart-simple"></i>
-                <span class="hidden sm:inline">실시간 현황판</span>
-            </button>
-
-            <!-- Sound toggle button -->
-            <button id="sound-toggle-btn" onclick="toggleSound()" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl border border-slate-700 transition-all text-slate-300 flex items-center justify-center w-9 h-9 shadow" title="소리 켜기/끄기">
-                <i id="sound-icon" class="fa-solid fa-volume-high"></i>
-            </button>
         </div>
     </header>
 
-    <!-- Main Game Container -->
-    <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center items-center">
-
-        <!-- STEP 0: GAME REGISTRATION AND INSTRUCTIONS -->
-        <div id="step-register" class="w-full max-w-lg bg-slate-900/90 rounded-2xl shadow-2xl border-2 border-emerald-500/40 p-6 md:p-8 transition-all duration-300">
+    <main class="flex-grow flex items-center justify-center py-6 px-4">
+        <!-- SCREEN 1: LOGIN & NAME INPUT -->
+        <div id="screen-login" class="w-full max-w-lg bg-slate-900/90 border border-slate-800 rounded-2xl p-6 md:p-8 neon-border-blue relative overflow-hidden">
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+            
             <div class="text-center mb-6">
-                <div class="inline-block bg-emerald-500/10 border border-emerald-500/40 p-4 rounded-full mb-3">
-                    <i class="fa-solid fa-door-closed text-emerald-400 text-4xl"></i>
+                <div class="inline-block bg-slate-950 p-4 rounded-full border-2 border-dashed border-blue-500/30 mb-3">
+                    <span class="text-4xl">🚪</span>
                 </div>
-                <h2 class="text-2xl md:text-3xl font-black text-white font-game-title">마법 영어교실 방탈출</h2>
-                <p class="text-slate-400 text-xs mt-2 leading-relaxed">
-                    불이 꺼진 마법의 영어 교실에 갇혔습니다! <br>
-                    교실을 탈출하기 위해선 1학기 전 범위에서 꼬여서 출현하는 <br>
-                    <strong class="text-emerald-400">24개의 단서 문제</strong>를 풀고, <br>
-                    6자리의 마스터 패스워드를 획득하여 문을 열어야 합니다!
+                <h2 class="text-2xl font-game text-slate-100">잠겨버린 영어실에서 탈출하라!</h2>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                    불이 꺼진 영어 교실 문이 굳게 닫혔습니다.<br>
+                    1학기 동안 배웠던 핵심 영어 문제들을 차근차근 해결하고,<br>
+                    <span class="text-emerald-400 font-bold">Rebecca 선생님</span>이 전해주는 무전 암호키를 수집하여 탈출하세요!
                 </p>
+            </div>
+
+            <!-- Red alert banner pointing to Name guide -->
+            <div class="bg-rose-950/40 border border-rose-500/30 rounded-xl p-3 mb-6 text-xs text-rose-300 flex items-start space-x-2">
+                <i class="fa-solid fa-triangle-exclamation mt-0.5 text-rose-400"></i>
+                <span>수료증에 멋지게 인쇄될 <strong>본인의 진짜 성명(실명)</strong>을 정확히 입력해야 명예의 전당과 탈출 수료증에 이름이 올바르게 박혀 보존됩니다!</span>
             </div>
 
             <div class="space-y-4">
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center text-xs text-amber-300/90 leading-relaxed font-semibold">
-                    <i class="fa-solid fa-circle-info mr-1 text-amber-400"></i>
-                    성공 시 멋진 마법 아카데미 영예 수료증이 발급됩니다.<br>
-                    반드시 <span class="underline text-emerald-400 decoration-emerald-500 decoration-2 font-black">자신의 학급 정보와 실제 실명</span>을 입력해 주세요!
-                </div>
-                
-                <!-- Class and Number inputs -->
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-people-roof text-emerald-400 mr-1.5"></i>학반</label>
-                        <select id="input-class" class="w-full px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl focus:border-emerald-500 outline-none transition-all text-white font-semibold">
-                            <option value="">학반 선택</option>
-                            <option value="1">1반</option>
-                            <option value="2">2반</option>
-                            <option value="3">3반</option>
-                            <option value="4">4반</option>
-                            <option value="5">5반</option>
-                            <option value="6">6반</option>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">반 선택</label>
+                        <select id="input-class" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-slate-200 focus:outline-none focus:border-blue-500 transition font-game">
+                            <option value="">반 선택</option>
+                            <option value="1">6학년 1반</option>
+                            <option value="2">6학년 2반</option>
+                            <option value="3">6학년 3반</option>
+                            <option value="4">6학년 4반</option>
+                            <option value="5">6학년 5반</option>
+                            <option value="6">6학년 6반</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-arrow-down-1-9 text-emerald-400 mr-1.5"></i>번호</label>
-                        <select id="input-number" class="w-full px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl focus:border-emerald-500 outline-none transition-all text-white font-semibold">
-                            <option value="">번호 선택</option>
-                            <!-- Programmatically populated in script or simple list -->
+                        <label class="block text-xs font-bold text-slate-400 mb-1">번호 선택</label>
+                        <select id="input-number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-slate-200 focus:outline-none focus:border-blue-500 transition font-game">
+                            <!-- Dynamically loaded via window.onload -->
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-id-card-clip text-emerald-400 mr-1.5"></i>도전자 실제 실명</label>
-                    <input type="text" id="input-name" placeholder="예: 홍길동" class="w-full px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl focus:border-emerald-500 outline-none transition-all text-white font-semibold">
+                    <label class="block text-xs font-bold text-slate-400 mb-1">성명 (실명 입력 필수)</label>
+                    <input type="text" id="input-name" placeholder="예: 홍길동" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 transition font-game text-center text-lg">
                 </div>
-                
-                <div class="pt-2 flex flex-col gap-2">
-                    <button onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-base py-4 rounded-xl shadow-lg hover:shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
-                        <span>영어 탈출 대작전 시작!</span>
-                        <i class="fa-solid fa-angles-right"></i>
-                    </button>
-                    <button onclick="openLeaderboard()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold text-xs py-2.5 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-1.5 shadow">
-                        <i class="fa-solid fa-chart-simple"></i>
-                        <span>선생님용 실시간 탈출 현황판 보기</span>
-                    </button>
-                </div>
-            </div>
 
-            <div class="mt-6 border-t border-slate-800 pt-4 text-center">
-                <p class="text-[11px] text-slate-500 leading-relaxed">
-                    * 이 게임은 천재교과서(김태은) 1학기 1~6단원 핵심 표현과 규칙을 무작위로 평가합니다.<br>
-                    난관에 부딪히면 무전기를 통해 <strong>Rebecca 선생님께 해독 힌트</strong>를 요청해 보세요! (예상 소요 시간: 15분)
-                </p>
+                <button onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 py-3.5 rounded-xl font-game font-bold text-lg hover:brightness-110 active:scale-95 transition shadow-lg shadow-emerald-500/20 mt-4 flex items-center justify-center space-x-2">
+                    <span>탈출 작전 시작하기</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
+                    <button onclick="openLeaderboard()" class="text-blue-400 hover:underline flex items-center gap-1">
+                        <i class="fa-solid fa-chart-simple"></i> 실시간 탈출 현황판 보기
+                    </button>
+                    <span class="text-slate-500">지능형 교육 컨텐츠</span>
+                </div>
             </div>
         </div>
 
-        <!-- STEP 1: SHUFFLED ESCAPE ROOM MISSION PANEL -->
-        <div id="step-challenge" class="w-full max-w-5xl bg-slate-900/90 rounded-2xl border-2 border-slate-700/80 shadow-2xl p-4 md:p-6 hidden relative transition-all">
+        <!-- SCREEN 2: ACTIVE ESCAPE GAME INTERFACE -->
+        <div id="screen-game" class="hidden w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- Escape Stats Header -->
-            <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 pb-4 mb-6 gap-3">
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-bold text-amber-300 flex items-center gap-1.5 animate-pulse">
-                        <i class="fa-solid fa-shuffle"></i>
-                        <span>뒤섞인 1학기 총복습 (24문항)</span>
+            <!-- Left 8 columns: Secret Lock & Puzzle Dashboard -->
+            <div class="lg:col-span-8 space-y-6">
+                <!-- Status dashboard -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between neon-border-green">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-emerald-500/20 border border-emerald-500/30 px-3 py-1 rounded-full text-xs text-emerald-400 font-game" id="badge-user-info">
+                            6학년 -반 -번 ---
+                        </div>
+                        <div class="flex items-center space-x-1.5 text-xs text-slate-400">
+                            <i class="fa-solid fa-hourglass-half animate-spin text-emerald-400 text-[10px]"></i>
+                            <span>탈출 경과:</span>
+                            <span class="font-digital text-emerald-300 font-bold text-sm tracking-widest" id="game-timer">00:00</span>
+                        </div>
                     </div>
-                    <!-- Student unique personalized frequency channel to prevent copying -->
-                    <div class="bg-indigo-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-bold text-indigo-300 flex items-center gap-1.5">
-                        <i class="fa-solid fa-wave-square"></i>
-                        <span id="unique-channel-tag">채널: 접속 대기 중</span>
+                    <!-- Master Lock Status -->
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] text-slate-400">해독 상태:</span>
+                        <div class="flex space-x-1 font-digital text-xs" id="master-lock-slots">
+                            <!-- Slots will render like [X] [4] [-] [-] [-] [-] -->
+                        </div>
                     </div>
                 </div>
-                
-                <div class="flex items-center gap-4">
-                    <!-- Progress meter -->
-                    <div class="text-right">
-                        <span class="text-[10px] text-slate-400 block font-semibold uppercase">암호 단서 수집 상황</span>
-                        <span id="quiz-progress-text" class="text-xs font-mono font-bold text-emerald-400">01 / 24 해결</span>
+
+                <!-- Problem Area -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden" id="puzzle-box">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-blue-500" id="progress-bar-inner"></div>
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[10px] text-emerald-400 font-digital tracking-widest uppercase" id="current-question-unit-label">UNIT 1</span>
+                        <span class="text-xs text-slate-500 font-digital" id="question-index-counter">0 / 24</span>
                     </div>
-                    <!-- Heart HP Bar -->
-                    <div class="flex gap-1" id="hearts-container">
-                        <i class="fa-solid fa-heart text-rose-500 text-lg"></i>
-                        <i class="fa-solid fa-heart text-rose-500 text-lg"></i>
-                        <i class="fa-solid fa-heart text-rose-500 text-lg"></i>
+
+                    <!-- Question Text (Korean Context) -->
+                    <div class="mb-6">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 mb-4 text-sm leading-relaxed" id="question-situation-box">
+                            상황문이 여기에 로드됩니다.
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-100 flex items-start gap-2" id="question-english-text">
+                            영어 질문이 로드됩니다.
+                        </h3>
+                    </div>
+
+                    <!-- Options Area -->
+                    <div id="question-options-container" class="space-y-3">
+                        <!-- Dynamic generated buttons for single choice -->
+                    </div>
+
+                    <!-- Lock Action State / Verification Alert -->
+                    <div id="answer-alert-banner" class="hidden mt-4 p-3 rounded-xl text-xs flex items-center space-x-2">
+                        <!-- Filled by response -->
+                    </div>
+                </div>
+
+                <!-- Interactive Clue Notebook (암호 해독 수첩) -->
+                <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-5">
+                    <h3 class="text-sm font-game text-yellow-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Rebecca 쌤의 암호 해독 수첩
+                    </h3>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                        4문제를 올바르게 풀 때마다 비상 탈출구 암호판의 숫자가 한 칸씩 자동으로 복원됩니다.<br>
+                        6자리를 모두 모으면 우측의 <strong>[비상 탈출 키패드]</strong>를 작동해 탈출문을 여세요!
+                    </p>
+                    <div class="grid grid-cols-6 gap-2" id="clue-decryption-boxes">
+                        <!-- 6 Box items -->
                     </div>
                 </div>
             </div>
 
-            <!-- Main Layout Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <!-- Left Playable Core Container (Takes 8 columns) -->
-                <div class="lg:col-span-8 flex flex-col justify-between min-h-[420px] bg-slate-950/70 p-5 rounded-2xl border border-slate-800">
-                    <div id="game-main-content" class="flex-grow">
-                        <!-- Dynamic mixed challenge components injected here via JS -->
+            <!-- Right 4 columns: Teacher Rebecca & Escape Pad -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Rebecca Walkie-Talkie & Hint -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 neon-border-gold">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="relative">
+                            <span class="text-3xl">👩‍🏫</span>
+                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-slate-900"></span>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-game text-amber-300">Rebecca 선생님 무전기</h4>
+                            <p class="text-[10px] text-slate-400">힌트를 받으려면 버튼을 클릭!</p>
+                        </div>
                     </div>
-
-                    <!-- Message Banner Feedback -->
-                    <div id="feedback-banner" class="hidden mt-6 p-3 rounded-xl text-center font-bold text-sm transition-all duration-300 border">
-                        <span id="feedback-text">대단해! 정답이야! 🔑</span>
-                    </div>
+                    <button onclick="requestHint()" class="w-full bg-slate-950 border border-slate-800 hover:border-amber-500/50 text-amber-300 text-xs py-2.5 rounded-xl transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-radio animate-bounce text-amber-400"></i>
+                        <span>해독 힌트 무전 받기</span>
+                    </button>
                 </div>
 
-                <!-- Right Notebook & Assistance Panel (Takes 4 columns) -->
-                <div class="lg:col-span-4 flex flex-col gap-4">
-                    
-                    <!-- Clue Notebook Board -->
-                    <div class="bg-slate-950/80 rounded-2xl p-4 border border-slate-800 shadow-inner">
-                        <h4 class="text-xs font-black text-amber-400 tracking-wider flex items-center gap-1.5 mb-3 uppercase">
-                            <i class="fa-solid fa-book-open"></i>
-                            <span>비상 탈출 비밀 암호판</span>
-                        </h4>
+                <!-- Escape Keypad Door Control -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                    <div class="text-center mb-4">
+                        <span class="text-2xl text-rose-500"><i class="fa-solid fa-door-closed"></i></span>
+                        <h4 class="text-sm font-game text-slate-200 mt-2">중앙 비상 탈출구 키패드</h4>
+                        <p class="text-[10px] text-slate-500 mt-1">해독 수첩의 암호를 입력해 탈출문을 여세요.</p>
+                    </div>
+
+                    <!-- Digital Entered screen display -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 text-center mb-4">
+                        <div id="entered-pin-display" class="font-digital text-xl text-emerald-400 tracking-widest h-8 flex items-center justify-center">------</div>
+                    </div>
+
+                    <!-- Dynamic Shuffled Keypad grid -->
+                    <div class="grid grid-cols-3 gap-2" id="escape-pin-keypad">
+                        <!-- Shuffled buttons will load -->
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <button onclick="clearEnteredPin()" class="bg-rose-950/40 hover:bg-rose-950 text-rose-400 py-2 rounded-lg border border-rose-900 text-xs font-game transition">초기화</button>
+                        <button onclick="submitEscapePin()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 py-2 rounded-lg text-xs font-game transition font-bold">탈출 승인 요청</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: SUCCESS ESCAPE (CERTIFICATE) -->
+        <div id="screen-success" class="hidden w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 neon-border-gold relative overflow-hidden">
+            <!-- Printing specific container wrapper -->
+            <div id="print-area" class="bg-slate-950 border-4 border-double border-amber-500/50 rounded-xl p-6 text-center text-slate-200 relative overflow-hidden">
+                
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.04),transparent)]"></div>
+
+                <div class="relative z-10">
+                    <div class="mb-4">
+                        <span class="text-4xl text-amber-500">🏆</span>
+                        <h2 class="text-2xl md:text-3xl font-game text-amber-400 tracking-wide mt-2">방탈출 성공 수료증</h2>
+                        <p class="text-xs text-slate-400 uppercase tracking-widest font-digital mt-1">Certificate of English Escape Master</p>
+                    </div>
+
+                    <div class="border-y border-slate-800 py-6 my-6 space-y-4 max-w-md mx-auto">
+                        <p class="text-sm text-slate-400">위 학생은 뛰어난 집중력과 영어 해독력을 바탕으로</p>
                         
-                        <!-- Visual representation of the Master Security Code slots -->
-                        <div class="grid grid-cols-6 gap-1 text-center py-2">
-                            <div class="bg-slate-900 border border-slate-700/60 p-2.5 rounded-lg">
-                                <span class="block text-[8px] text-slate-500">1번</span>
-                                <span id="code-slot-0" class="text-lg font-black text-emerald-400 font-mono">-</span>
-                            </div>
-                            <div class="bg-slate-900 border border-slate-700/60 p-2.5 rounded-lg">
-                                <span class="block text-[8px] text-slate-500">2번</span>
-                                <span id="code-slot-1" class="text-lg font-black text-emerald-400 font-mono">-</span>
-                            </div>
-                            <div class="bg-slate-900 border border-slate-700/60 p-2.5 rounded-lg">
-                                <span class="block text-[8px] text-slate-500">3번</span>
-                                <span id="code-slot-2" class="text-lg font-black text-emerald-400 font-mono">-</span>
-                            </div>
-                            <div class="bg-slate-900 border border-slate-700/60 p-2.5 rounded-lg">
-                                <span class="block text-[8px] text-slate-500">4번</span>
-                                <span id="code-slot-3" class="text-lg font-black text-emerald-400 font-mono">-</span>
-                            </div>
-                            <div class="bg-slate-900 border border-slate-700/60 p-2.5 rounded-lg">
-                                <span class="block text-[8px] text-slate-500">5번</span>
-                                <span id="code-slot-4" class="text-lg font-black text-emerald-400 font-mono">-</span>
-                            </div>
-                            <div class="bg-slate-900 border border-slate-700/60 p-2.5 rounded-lg">
-                                <span class="block text-[8px] text-slate-500">6번</span>
-                                <span id="code-slot-5" class="text-lg font-black text-emerald-400 font-mono">-</span>
-                            </div>
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                            <h3 id="cert-user-info" class="text-xl font-game text-slate-200">6학년 1반 1번 홍길동</h3>
+                            <p class="text-xs text-slate-400 mt-1">고유 탈출 주파수: <span id="cert-channel-id" class="font-digital text-blue-400">CH-NONE</span></p>
                         </div>
-                        <p class="text-[9px] text-slate-500 text-center mt-2 leading-relaxed">
-                            * 무작위 영어 암호를 <strong class="text-amber-400">4개 해결할 때마다</strong><br>탈출 암호문 조각이 하나씩 선명하게 복원됩니다!
+
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            천재교과서(김태은) 1~6단원 융합 복습 과제를<br>
+                            모두 해결하고 마법 교실 자물쇠를 정상 해독하였기에<br>
+                            이에 우수한 성적으로 방탈출 완료를 인증합니다.
                         </p>
                     </div>
 
-                    <!-- Walkie-Talkie Assistance Column -->
-                    <div class="bg-slate-950/80 rounded-2xl p-4 border border-slate-800 shadow-inner flex flex-col items-center">
-                        <div class="flex items-center gap-3 w-full border-b border-slate-800 pb-2 mb-3">
-                            <div class="text-xl">📻</div>
-                            <div class="text-left">
-                                <span class="text-[8px] text-emerald-400 font-bold block animate-pulse">■ RECEIVING LIVE HINT</span>
-                                <h5 class="text-xs font-bold text-slate-300">Rebecca 쌤과의 무전 연락</h5>
-                            </div>
+                    <div class="flex justify-between items-end mt-12 max-w-sm mx-auto text-left">
+                        <div>
+                            <p class="text-[10px] text-slate-500">탈출 완료 소요시간</p>
+                            <p id="cert-time-record" class="font-digital text-lg text-emerald-400 font-bold">00분 00초</p>
                         </div>
-
-                        <!-- Speech Box -->
-                        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl w-full min-h-[100px] flex items-center text-left">
-                            <p id="teacher-bubble" class="text-xs text-slate-400 leading-relaxed font-medium">
-                                수신 대기 중... 다음 단서 문제를 풀 수 있도록 유용한 영어 힌트를 보내줄게!
-                            </p>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400">2026년 융합복습 완료</p>
+                            <p class="font-game text-base text-amber-400 mt-1">지도교사 <span class="font-bold underline tracking-wider">TEACHER. JUNG</span> (인)</p>
                         </div>
-
-                        <!-- Hint trigger button -->
-                        <button onclick="revealTeacherHint()" class="mt-3 w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-xl shadow transition-transform transform active:scale-95 flex items-center justify-center gap-1.5 text-xs">
-                            <i class="fa-solid fa-tower-broadcast animate-bounce"></i>
-                            <span>무전 힌트 요청하기!</span>
-                        </button>
                     </div>
-
-                </div>
-
-            </div>
-        </div>
-
-        <!-- STEP 2: THE KEYPAD KEY-ENTRY TERMINAL (FINAL LOCKROOM) -->
-        <div id="step-keypad-panel" class="w-full max-w-md bg-slate-900 border-2 border-emerald-500 rounded-2xl shadow-2xl p-6 md:p-8 hidden text-center transition-all">
-            <div class="mb-5">
-                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold font-mono tracking-widest inline-block mb-2">
-                    LOCKED DOOR SECURITY
-                </span>
-                <h3 class="text-xl font-bold text-white">비상구 잠금 키패드</h3>
-                <p class="text-xs text-slate-400 mt-1">단서 노트에 모아진 6자리 마스터 비밀번호를 차례대로 누르세요!</p>
-            </div>
-
-            <!-- Keypad Display Screen -->
-            <div class="bg-slate-950 border-2 border-slate-800 rounded-xl py-4 px-6 mb-6">
-                <div id="keypad-display" class="text-3xl font-mono font-black text-emerald-400 tracking-widest min-h-[40px] flex items-center justify-center">
-                    _ _ _ _ _ _
                 </div>
             </div>
 
-            <!-- Clue Reminder Note -->
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 mb-6 flex justify-between items-center text-left">
-                <div>
-                    <span class="block text-[9px] text-slate-500">내가 모은 탈출 암호문 조각</span>
-                    <span id="keypad-clue-reminder" class="text-sm font-mono font-bold text-amber-400 tracking-wider">A - B - C - D - E - F</span>
-                </div>
-                <div class="text-xs text-slate-400">
-                    <i class="fa-solid fa-info-circle mr-1 text-slate-500"></i>순서대로 입력!
-                </div>
-            </div>
-
-            <!-- Keypad Buttons Grid -->
-            <div class="grid grid-cols-4 gap-3 mb-6" id="keypad-buttons-grid">
-                <!-- Programmatically generated keys -->
-            </div>
-
-            <!-- Action buttons -->
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="clearKeypadDisplay()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3.5 rounded-xl text-sm transition-all shadow border border-slate-700">
-                    <i class="fa-solid fa-arrow-rotate-left mr-1"></i> 지우기
-                </button>
-                <button onclick="submitKeypadCode()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl text-sm shadow hover:shadow-emerald-500/20 transition-all border border-emerald-500">
-                    검증 및 탈출 <i class="fa-solid fa-unlock ml-1"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- STEP 3: OFFICIAL ESCAPE SUCCESS CERTIFICATE -->
-        <div id="step-certificate" class="w-full max-w-2xl bg-slate-950 border-4 border-amber-500/70 rounded-3xl p-6 md:p-12 shadow-2xl hidden relative transition-all">
-            
-            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-950 rounded-full p-4 shadow-xl border-4 border-slate-900 w-20 h-20 flex items-center justify-center text-4xl animate-bounce">
-                👑
-            </div>
-
-            <div class="border-2 border-dashed border-amber-400/40 rounded-2xl p-6 md:p-10 text-center bg-slate-900/40">
-                <p class="font-game-title text-amber-400 text-xs uppercase tracking-widest font-black mb-1">Room Escape Certification</p>
-                <h2 class="text-2xl md:text-4xl font-extrabold text-amber-300 mb-6">방 탈 출 수 료 증</h2>
-
-                <div class="space-y-6 text-slate-300 leading-relaxed my-8 font-medium">
-                    <p class="text-xl">
-                        소속 및 성명: <span id="cert-student-name" class="underline decoration-amber-500 decoration-2 font-extrabold text-emerald-400 text-2xl px-2">6학년 1반 1번 홍길동</span>
-                    </p>
-                    <p class="text-sm text-slate-400">
-                        위 어린이는 초등학교 6학년 영어 과정을 우수한 성적으로 이수하였습니다.
-                    </p>
-                    
-                    <div class="max-w-md mx-auto bg-slate-950 border border-slate-800 p-4 rounded-xl text-left text-xs text-slate-400 space-y-1 shadow-inner">
-                        <p class="text-center font-bold text-amber-400 mb-2">⭐ 마스터한 1~6단원 마법의 영어 질문 ⭐</p>
-                        <p>✔ Lesson 1: 학년 묻고 답하기 (What grade are you in?)</p>
-                        <p>✔ Lesson 2: 질병 증상과 처방 제안 (I have a cold / see a dentist)</p>
-                        <p>✔ Lesson 3: 12달과 서수 생일 말하기 (When is your birthday?)</p>
-                        <p>✔ Lesson 4: 키, 안경, 곱슬머리 등 인물 묘사 (straight/curly hair)</p>
-                        <p>✔ Lesson 5: be going to 미래 행동 계획 (going to see a movie)</p>
-                        <p>✔ Lesson 6: 무게, 높이, 속도 비교하기 (heavier, faster than)</p>
-                    </div>
-
-                    <p class="text-xs md:text-sm pt-4 leading-relaxed">
-                        위 학생은 불 꺼진 영어 교실에 갇혔음에도 불구하고, 뛰어난 영어 지능과 끈기 있는 탐구심으로 <strong class="text-white">1~6단원 범위의 24개 심화 영어 문제</strong>를 해결하여 최종 비밀 암호를 해독하였으며, 이에 본 영예의 방탈출 수료증을 수여합니다.
-                    </p>
-                </div>
-
-                <div class="mt-8 flex flex-col items-center justify-center gap-1 border-t border-slate-800 pt-6">
-                    <span class="text-slate-500 text-[10px] tracking-wider" id="current-date-cert">2026년 6월 10일</span>
-                    <span class="text-sm font-bold text-slate-300 mt-1 flex items-center gap-1.5">
-                        마법 영어 아카데미 지도교사 TEACHER. JUNG
-                        <span class="inline-block bg-rose-500/10 border border-rose-500/30 text-rose-400 text-[8px] font-bold rounded-full w-6 h-6 flex items-center justify-center p-1 leading-none shadow shadow-inner">인</span>
-                    </span>
-                    <!-- Final Record Badge -->
-                    <span id="final-escape-record" class="mt-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs px-3 py-1 rounded-lg font-mono">
-                        최종 탈출 시간: 00분 00초
-                    </span>
-                </div>
-            </div>
-
-            <!-- Print, Retry and Live Board Buttons -->
-            <div class="mt-8 flex flex-wrap justify-center gap-4">
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 px-6 py-3 rounded-xl font-bold text-sm shadow transition-all flex items-center gap-2">
+            <!-- Printing & Control Actions -->
+            <div class="flex flex-col sm:flex-row gap-3 mt-6 no-print">
+                <button onclick="window.print()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 py-3 rounded-xl font-game font-bold text-sm transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-print"></i>
                     <span>수료증 인쇄 / PDF 저장</span>
                 </button>
-                <button onclick="openLeaderboard()" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-6 py-3 rounded-xl font-bold text-sm shadow transition-all flex items-center gap-2">
+                <button onclick="openLeaderboard()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl font-game font-bold text-sm transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-chart-simple"></i>
-                    <span>실시간 탈출 현황판 보기</span>
+                    <span>실시간 탈출 현황판</span>
                 </button>
-                <button onclick="restartEntireGame()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-rotate-right"></i>
-                    <span>처음부터 다시 탈출하기!</span>
+                <button onclick="location.reload()" class="bg-slate-950 hover:bg-slate-900 text-slate-400 px-5 py-3 rounded-xl font-game text-xs transition border border-slate-800">
+                    다시 도전하기
                 </button>
             </div>
         </div>
-
     </main>
 
-    <!-- REAL-TIME ESCAPE STATUS LEADERBOARD MODAL -->
-    <div id="leaderboard-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border-2 border-emerald-500/50 rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl transition-all">
-            <!-- Modal Header -->
-            <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50 rounded-t-2xl">
-                <div class="flex items-center gap-2.5 text-emerald-400">
-                    <i class="fa-solid fa-trophy text-xl text-amber-400 animate-bounce"></i>
-                    <div>
-                        <h3 class="font-extrabold text-base md:text-lg">실시간 마법교실 탈출 현황판</h3>
-                        <p class="text-[10px] text-slate-400">학생들이 탈출에 성공한 시간이 실시간 기록됩니다.</p>
-                    </div>
+    <!-- HINT DIALOG OVERLAY -->
+    <div id="hint-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-6 neon-border-gold">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <h4 class="text-amber-400 font-game flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-radio text-amber-400"></i> Rebecca 선생님의 무전 힌트!
+                </h4>
+                <button onclick="closeHintModal()" class="text-slate-400 hover:text-slate-100"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p id="hint-modal-text" class="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
+                힌트 내용이 로드됩니다.
+            </p>
+            <div class="mt-5 flex justify-end">
+                <button onclick="closeHintModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg font-game text-xs transition">무전 끊기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD SYSTEM MODAL -->
+    <div id="leaderboard-modal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-blue-500/40 rounded-2xl max-w-2xl w-full p-6 neon-border-blue flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <div>
+                    <h4 class="text-blue-400 font-game flex items-center gap-2 text-lg">
+                        <i class="fa-solid fa-chart-simple text-blue-400"></i> 실시간 탈출 현황판
+                    </h4>
+                    <p class="text-[10px] text-slate-500">마법 영어교실을 무사히 빠져나간 친구들의 순위</p>
                 </div>
-                <button onclick="closeLeaderboard()" class="text-slate-400 hover:text-white bg-slate-800 p-2 rounded-xl transition-all w-8 h-8 flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeLeaderboard()" class="text-slate-400 hover:text-slate-100"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Class filter Selector (Interactive Buttons) -->
-            <div class="px-5 py-3 border-b border-slate-800/80 bg-slate-950/40 flex flex-col gap-2">
-                <span class="text-[10px] text-slate-400 font-bold uppercase"><i class="fa-solid fa-filter mr-1 text-emerald-400"></i>반별 기록 필터링</span>
-                <div class="flex flex-wrap gap-1.5" id="class-filter-container">
-                    <!-- Class select pills will be generated by script -->
+            <!-- Sort and class filtering tabs -->
+            <div class="space-y-3 mb-4">
+                <!-- Sort options -->
+                <div class="flex gap-2 text-xs">
+                    <button id="sort-btn-time" onclick="changeSortOrder('time')" class="flex-1 py-1.5 rounded bg-blue-950 text-blue-300 font-game border border-blue-900">
+                        ⚡ 탈출 속도 단축 순서
+                    </button>
+                    <button id="sort-btn-latest" onclick="changeSortOrder('latest')" class="flex-1 py-1.5 rounded bg-slate-950 text-slate-400 font-game border border-slate-800">
+                        🕒 최신 탈출 완료 순서
+                    </button>
+                </div>
+                <!-- Class Filtering tabs -->
+                <div class="flex gap-1 overflow-x-auto pb-1 text-xs justify-between">
+                    <button onclick="filterClass('all')" class="class-filter-tab px-3 py-1 rounded bg-blue-500 text-slate-950 font-bold" id="class-filter-all">전체</button>
+                    <button onclick="filterClass('1')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-1">1반</button>
+                    <button onclick="filterClass('2')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-2">2반</button>
+                    <button onclick="filterClass('3')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-3">3반</button>
+                    <button onclick="filterClass('4')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-4">4반</button>
+                    <button onclick="filterClass('5')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-5">5반</button>
+                    <button onclick="filterClass('6')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-6">6반</button>
                 </div>
             </div>
 
-            <!-- Sort Option Selector -->
-            <div class="px-5 py-3 border-b border-slate-800 bg-slate-950/20 flex gap-2">
-                <button id="sort-recent-btn" onclick="toggleSort('recent')" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-2 rounded-lg border border-emerald-500 shadow transition-all">
-                    🕒 탈출 완료 순서 (선착순)
-                </button>
-                <button id="sort-speed-btn" onclick="toggleSort('speed')" class="flex-1 bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700 font-bold text-xs py-2 rounded-lg border border-slate-700 transition-all">
-                    ⚡ 소요 시간 단축 순서
-                </button>
+            <!-- Scrollable rankings list -->
+            <div class="flex-grow overflow-y-auto space-y-2 pr-1" id="leaderboard-ranking-list">
+                <!-- Records loaded dynamically -->
+                <div class="text-center text-xs text-slate-500 py-12">기록 로딩중...</div>
             </div>
 
-            <!-- Leaderboard List Section -->
-            <div class="p-5 overflow-y-auto flex-grow space-y-2" id="leaderboard-list">
-                <!-- Records injected here dynamically -->
-                <div class="text-center py-10 text-slate-500 text-sm">
-                    <i class="fa-solid fa-spinner animate-spin text-emerald-400 text-2xl mb-3 block"></i>
-                    탈출 기록을 불러오는 중입니다...
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="p-4 border-t border-slate-800 text-center text-[10px] text-slate-500 bg-slate-950/50 rounded-b-2xl">
-                * 화면은 실시간으로 자동 갱신됩니다. 프로젝터나 교실 TV에 띄우기 좋습니다.
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500">
+                <span>* Firebase Firestore 실시간 동기화 적용</span>
+                <button onclick="closeLeaderboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-1.5 rounded font-game">닫기</button>
             </div>
         </div>
     </div>
@@ -446,557 +417,11 @@
     </footer>
 
     <!-- FIREBASE SERVICES CORE IMPORTS -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global integration config initialization
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'magical-english-classroom';
-        let db = null;
-        let auth = null;
-        let user = null;
-        let rawRecords = [];
-        let activeSort = 'recent'; // 'recent' or 'speed'
-        let activeClassFilter = 'all'; // 'all', '1', '2', etc.
-
-        // Connect to server database safely
-        async function initFirebaseServices() {
-            try {
-                if (typeof __firebase_config === 'undefined') {
-                    console.log("No Firebase config detected. Running local fallback.");
-                    renderLocalPlaceholderRecords();
-                    return;
-                }
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // Authenticate before requesting documents (RULE 3)
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    const userCred = await signInWithCustomToken(auth, __initial_auth_token);
-                    user = userCred.user;
-                } else {
-                    const userCred = await signInAnonymously(auth);
-                    user = userCred.user;
-                }
-
-                // Setup listener to stream student completions in real-time
-                subscribeToEscapeRecords();
-            } catch (err) {
-                console.error("Firebase Initialization Failure: ", err);
-                renderLocalPlaceholderRecords();
-            }
-        }
-
-        // Save student records directly to Firestore database (RULE 1)
-        async function saveCompletedRecord(classNum, studentNum, name, seconds) {
-            if (!db || !user) {
-                console.warn("DB not ready, saving to local state instead.");
-                // Fallback to local storage for testing
-                const localRecs = JSON.parse(localStorage.getItem('6th_escape_local_records_v2') || "[]");
-                localRecs.push({ 
-                    class: classNum, 
-                    number: studentNum, 
-                    name: name, 
-                    elapsed: seconds, 
-                    timestamp: Date.now() 
-                });
-                localStorage.setItem('6th_escape_local_records_v2', JSON.stringify(localRecs));
-                rawRecords = localRecs;
-                renderLeaderboardUI();
-                return;
-            }
-
-            try {
-                // Strict collection path matching RULE 1
-                const pathRef = collection(db, 'artifacts', appId, 'public', 'data', 'escape_records_v2');
-                await addDoc(pathRef, {
-                    class: classNum,
-                    number: studentNum,
-                    name: name,
-                    elapsed: seconds,
-                    timestamp: Date.now()
-                });
-            } catch (e) {
-                console.error("Failed to post escape record to cloud: ", e);
-            }
-        }
-
-        // Retrieve & Sync records in real-time without complex index queries (RULE 2)
-        function subscribeToEscapeRecords() {
-            if (!db || !user) return;
-            // Simple query over collection to prevent composite index errors (RULE 2)
-            const pathRef = collection(db, 'artifacts', appId, 'public', 'data', 'escape_records_v2');
-            
-            onSnapshot(pathRef, (snapshot) => {
-                const loaded = [];
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data && data.name) {
-                        loaded.push({
-                            class: data.class || "1",
-                            number: data.number || "1",
-                            name: data.name,
-                            elapsed: data.elapsed || 0,
-                            timestamp: data.timestamp || Date.now()
-                        });
-                    }
-                });
-                rawRecords = loaded;
-                renderLeaderboardUI();
-            }, (error) => {
-                console.error("Subscription to live records failed: ", error);
-            });
-        }
-
-        function renderLocalPlaceholderRecords() {
-            // Local fallback setup
-            const localRecs = JSON.parse(localStorage.getItem('6th_escape_local_records_v2') || "[]");
-            rawRecords = localRecs;
-            renderLeaderboardUI();
-        }
-
-        // Render sorted ranking table
-        function renderLeaderboardUI() {
-            const listContainer = document.getElementById('leaderboard-list');
-            if (!listContainer) return;
-
-            // Generate Filter Tabs (Pills)
-            renderFilterTabs();
-
-            // Filter in-memory before sorting (Adhering to RULE 2)
-            let filtered = [...rawRecords];
-            if (activeClassFilter !== 'all') {
-                filtered = filtered.filter(rec => String(rec.class) === String(activeClassFilter));
-            }
-
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="text-center py-12 text-slate-500">
-                        <div class="text-5xl mb-4">🔓</div>
-                        <p class="text-sm font-bold">해당 필터에 매칭되는 탈출 기록이 없습니다.</p>
-                        <p class="text-xs text-slate-600 mt-1">가장 먼저 탈출에 도전하여 학급 역사를 장식하세요!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Copy and apply sorting in JS Memory (RULE 2)
-            if (activeSort === 'recent') {
-                // Descending by completion time
-                filtered.sort((a, b) => b.timestamp - a.timestamp);
-            } else {
-                // Ascending by elapsed duration
-                filtered.sort((a, b) => a.elapsed - b.elapsed);
-            }
-
-            let html = '<div class="space-y-2">';
-            filtered.forEach((rec, index) => {
-                const min = Math.floor(rec.elapsed / 60);
-                const sec = rec.elapsed % 60;
-                const timeStr = `${min}분 ${sec < 10 ? '0' + sec : sec}초`;
-                
-                // Formulate beautiful relative or standard date representation
-                const dateParsed = new Date(rec.timestamp);
-                const localTimeStr = dateParsed.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-                // Highlight top 3
-                let rankBadge = `<span class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center text-xs font-mono">${index + 1}</span>`;
-                let borderHighlight = "border-slate-800/80 bg-slate-950/40";
-                if (activeSort === 'speed') {
-                    if (index === 0) {
-                        rankBadge = `<span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs shadow-md shadow-amber-500/20">👑</span>`;
-                        borderHighlight = "border-amber-500/40 bg-amber-500/5";
-                    } else if (index === 1) {
-                        rankBadge = `<span class="w-6 h-6 rounded-full bg-slate-300 text-slate-950 font-black flex items-center justify-center text-xs shadow-md">🥈</span>`;
-                        borderHighlight = "border-slate-400/30 bg-slate-400/5";
-                    } else if (index === 2) {
-                        rankBadge = `<span class="w-6 h-6 rounded-full bg-amber-700 text-slate-100 font-black flex items-center justify-center text-xs shadow-md">🥉</span>`;
-                        borderHighlight = "border-amber-800/30 bg-amber-800/5";
-                    }
-                }
-
-                html += `
-                    <div class="flex items-center justify-between p-3.5 rounded-xl border ${borderHighlight} transition-all">
-                        <div class="flex items-center gap-2 md:gap-3">
-                            ${rankBadge}
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-bold px-2 py-0.5 rounded text-[10px]">
-                                    6학년 ${rec.class}반 ${rec.number}번
-                                </span>
-                                <span class="font-bold text-white text-sm md:text-base">${escapeHTML(rec.name)}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 text-right">
-                            <div>
-                                <span class="block text-[10px] text-slate-500">기록</span>
-                                <span class="text-emerald-400 font-mono font-bold text-sm">${timeStr}</span>
-                            </div>
-                            <div class="border-l border-slate-800 pl-4 hidden sm:block">
-                                <span class="block text-[10px] text-slate-500">탈출 완료 시각</span>
-                                <span class="text-slate-400 text-xs font-mono">${localTimeStr}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            listContainer.innerHTML = html;
-        }
-
-        // Helper to dynamically build class selection buttons in Leaderboard modal
-        function renderFilterTabs() {
-            const container = document.getElementById('class-filter-container');
-            if (!container) return;
-
-            const classes = ['all', '1', '2', '3', '4', '5', '6'];
-            let html = '';
-            classes.forEach(c => {
-                const label = c === 'all' ? '전체 보기' : `${c}반`;
-                const activeStyle = String(activeClassFilter) === String(c) 
-                    ? "bg-emerald-600 border-emerald-500 text-white font-extrabold shadow shadow-emerald-500/20" 
-                    : "bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200 hover:bg-slate-700 font-medium";
-                html += `
-                    <button onclick="setClassFilter('${c}')" class="px-2.5 py-1 text-[11px] rounded-lg border transition-all ${activeStyle}">
-                        ${label}
-                    </button>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // HTML escaping utility to prevent script injections in public names
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
-
-        // Expose critical save actions to traditional browser game routines
-        window.saveRecordToCloud = saveCompletedRecord;
-        
-        // Expose leaderboard sorting controls
-        window.toggleSort = function(type) {
-            activeSort = type;
-            const recentBtn = document.getElementById('sort-recent-btn');
-            const speedBtn = document.getElementById('sort-speed-btn');
-
-            if (type === 'recent') {
-                recentBtn.className = "flex-1 bg-emerald-600 text-white font-bold text-xs py-2 rounded-lg border border-emerald-500 shadow transition-all";
-                speedBtn.className = "flex-1 bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700 font-bold text-xs py-2 rounded-lg border border-slate-700 transition-all";
-            } else {
-                speedBtn.className = "flex-1 bg-emerald-600 text-white font-bold text-xs py-2 rounded-lg border border-emerald-500 shadow transition-all";
-                recentBtn.className = "flex-1 bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700 font-bold text-xs py-2 rounded-lg border border-slate-700 transition-all";
-            }
-            renderLeaderboardUI();
-        };
-
-        // Expose leaderboard class filters
-        window.setClassFilter = function(classVal) {
-            activeClassFilter = classVal;
-            renderLeaderboardUI();
-        };
-
-        // Initialize connection automatically
-        window.addEventListener('load', () => {
-            initFirebaseServices();
-        });
-
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        /* 24 INTEGRATED CURRICULUM QUESTIONS (Exactly 4 practical Questions per Lesson, No Grammar rules) */
-        const ALL_QUESTIONS_POOL = [
-            // LESSON 1: What Grade Are You In? (Questions 1-4)
-            {
-                lessonId: 1,
-                lessonTag: "LESSON 1",
-                type: "scramble",
-                question: "다음 단어 블록을 정렬하여 '나는 6학년이야.' 문장을 완벽하게 조합하세요.",
-                blocks: ["grade.", "sixth", "the", "in", "I'm"],
-                correctOrder: ["I'm", "in", "the", "sixth", "grade."],
-                hint: "I'm (~이다) 다음에 '특정 학년'을 가리키는 'in the sixth grade'의 배치 구조를 상기해보렴!"
-            },
-            {
-                lessonId: 1,
-                lessonTag: "LESSON 1",
-                type: "choice",
-                question: "상대방에게 '너는 몇 학년이니?'라고 정중하게 학년을 물어볼 때 사용할 수 있는 가장 올바른 어휘 질문은 무엇인가요?",
-                options: [
-                    "How old are you?",
-                    "What grade are you in?",
-                    "Where do you study?",
-                    "Which school are you?"
-                ],
-                correctIndex: 1,
-                hint: "상대방의 '학년'을 의미하는 핵심 단어는 'grade'란다. 전치사 'in'과 함께 어울리는 문장을 선택하렴."
-            },
-            {
-                lessonId: 1,
-                lessonTag: "LESSON 1",
-                type: "scramble",
-                question: "'너는 몇 학년이니?' 질문의 올바른 어순을 조합해 보세요.",
-                blocks: ["are", "What", "in?", "grade", "you"],
-                correctOrder: ["What", "grade", "are", "you", "in?"],
-                hint: "What grade로 첫 질문의 문을 연 뒤, be동사(are) + 주어(you) + 끝맺는 전치사(in?) 순서로 이어붙여봐!"
-            },
-            {
-                lessonId: 1,
-                lessonTag: "LESSON 1",
-                type: "choice",
-                question: "새로운 전학생 에밀리가 수줍게 말합니다. \"I'm in the fifth grade.\" 이 말의 뜻으로 가장 올바른 상황은 무엇인가요?",
-                options: [
-                    "나는 다섯 시에 학교에 가.",
-                    "나는 5학년이야.",
-                    "나는 다섯 명의 친구가 있어.",
-                    "나는 5층에 살고 있어."
-                ],
-                correctIndex: 1,
-                hint: "학년을 나타내는 'fifth grade'의 뜻과 서수 'fifth'가 몇 번째인지 떠올려보려무나!"
-            },
-
-            // LESSON 2: I Have a Cold (Questions 5-8)
-            {
-                lessonId: 2,
-                lessonTag: "LESSON 2",
-                type: "choice",
-                question: "친구가 '이빨이 너무 아파(I have a toothache).'라고 고통을 호소합니다. 가장 적절한 영어 제안(조언)은?",
-                options: [
-                    "You should see a dentist.",
-                    "You should go to sleep.",
-                    "You should drink cold soda.",
-                    "You should buy a dictionary."
-                ],
-                correctIndex: 0,
-                hint: "치과 의사는 영어로 'dentist'라고 해. 이가 아플 땐 치과 진료를 추천하는 'You should see a dentist'가 정답이야!"
-            },
-            {
-                lessonId: 2,
-                lessonTag: "LESSON 2",
-                type: "scramble",
-                question: "'너는 약을 좀 먹는 게 좋겠어.' 조언의 의미가 되도록 아래 단어들을 결합하세요.",
-                blocks: ["medicine.", "should", "take", "some", "You"],
-                correctOrder: ["You", "should", "take", "some", "medicine."],
-                hint: "의무/권유의 조동사 'should' 바로 다음에는 동사원형 'take'가 오고, 그 뒤에 '약(medicine)'이 와야 한단다."
-            },
-            {
-                lessonId: 2,
-                lessonTag: "LESSON 2",
-                type: "choice",
-                question: "친구가 감기에 걸려 열이 날 때(I have a fever), 해줄 수 있는 가장 알맞은 위로와 제안 표현을 고르세요.",
-                options: [
-                    "Go and play computer games.",
-                    "You should get some rest.",
-                    "You should eat ice cream.",
-                    "Don't worry about it."
-                ],
-                correctIndex: 1,
-                hint: "몸이 몹시 아플 때는 집에서 휴식을 잘 취하는 것이 우선이지! 'get some rest(휴식을 취하다)'를 찾아보렴."
-            },
-            {
-                lessonId: 2,
-                lessonTag: "LESSON 2",
-                type: "scramble",
-                question: "'나는 콧물이 나.'라는 아픈 증상의 어순을 바르게 정렬하세요.",
-                blocks: ["runny", "nose.", "I", "have", "a"],
-                correctOrder: ["I", "have", "a", "runny", "nose."],
-                hint: "주인공 'I' -> 증상을 가지고 있다 'have a' -> 콧물 'runny nose.' 순서대로 맞추면 완성된다!"
-            },
-
-            // LESSON 3: When Is Your Birthday? (Questions 9-12)
-            {
-                lessonId: 3,
-                lessonTag: "LESSON 3",
-                type: "choice",
-                question: "질문 'When is your birthday?'(생일이 언제니?)에 대해 문법과 서수 규칙을 완벽하게 맞춘 답변 카드를 선택하세요.",
-                options: [
-                    "It's July five.",
-                    "It's on July fifth.",
-                    "My birthday is July on 5.",
-                    "It's on July five."
-                ],
-                correctIndex: 1,
-                hint: "달력 날짜(일)를 답할 때는 서수형태(fifth, second 등)로 말하고, 특정한 날짜 앞에 붙는 전치사 'on'을 꼭 챙겨야 해!"
-            },
-            {
-                lessonId: 3,
-                lessonTag: "LESSON 3",
-                type: "scramble",
-                question: "'내 생일은 10월 4일이야.' 영어 표현이 완벽한 어순이 되도록 단어 기차를 연결해 봐요.",
-                blocks: ["It's", "on", "October", "fourth."],
-                correctOrder: ["It's", "on", "October", "fourth."],
-                hint: "어순 흐름: 'It's' -> 전치사 'on' -> 10월을 의미하는 'October' -> 서수 형태의 날짜인 'fourth.'"
-            },
-            {
-                lessonId: 3,
-                lessonTag: "LESSON 3",
-                type: "choice",
-                question: "우리 학교 축제가 '5월 21일'에 열립니다. 'May 21st'의 올바른 영어 서수 발음과 표기법을 찾아라!",
-                options: [
-                    "May twenty-one",
-                    "May twenty-first",
-                    "May twenty-oneth",
-                    "May twentieth-one"
-                ],
-                correctIndex: 1,
-                hint: "21일은 twenty-one이 아닌 서수 형태인 'twenty-first'로 표현하는 게 핵심 원칙이란다."
-            },
-            {
-                lessonId: 3,
-                lessonTag: "LESSON 3",
-                type: "scramble",
-                question: "'너의 생일은 언제니?' 질문 형태의 영어 카드를 바르게 배열해 주세요.",
-                blocks: ["birthday?", "When", "is", "your"],
-                correctOrder: ["When", "is", "your", "birthday?"],
-                hint: "의문사 'When(언제)'을 가장 맨 앞에 배치한 후, 'is your birthday?'로 물어보는 순서란다."
-            },
-
-            // LESSON 4: She Has Short Curly Hair (Questions 13-16)
-            {
-                lessonId: 4,
-                lessonTag: "LESSON 4",
-                type: "visual-choice",
-                question: "용의자의 외모 단서가 적힌 노트를 읽고, 알맞은 한 사람을 찾아 자물쇠 번호를 입력하세요.\n\"He is tall. He has straight hair and glasses.\"",
-                options: [
-                    { text: "키가 작고 곱슬곱슬한 머리를 지녔으며, 주근깨가 있는 귀여운 소년", correct: false, avatar: "👦" },
-                    { text: "키가 크며, 차분하고 깔끔한 생머리에 동그란 안경을 착용한 멋진 선생님", correct: true, avatar: "👨‍🏫" },
-                    { text: "키가 아주 크고 단정한 미소를 지녔으나 안경을 절대 착용하지 않은 중학생", correct: false, avatar: "🧑" }
-                ],
-                correctIndex: 1,
-                hint: "단서 키워드: 'tall(키가 큰)', 'straight hair(생머리)', 그리고 'glasses(안경)'를 만족하는 인물을 발견해 봐!"
-            },
-            {
-                lessonId: 4,
-                lessonTag: "LESSON 4",
-                type: "scramble",
-                question: "'그녀는 짧은 곱슬머리를 가지고 있어.' 묘사 표현을 어순에 맞춰 완성해 보세요.",
-                blocks: ["hair.", "curly", "short", "has", "She"],
-                correctOrder: ["She", "has", "short", "curly", "hair."],
-                hint: "주인공 'She' -> 가지다 'has' -> 길이를 나타내는 형용사(short)가 머리 모양 성격(curly)보다 보통 먼저 나온단다."
-            },
-            {
-                lessonId: 4,
-                lessonTag: "LESSON 4",
-                type: "choice",
-                question: "다음 중 '그는 파란색 티셔츠를 입고 있는 중이야'라는 인물 옷차림의 행동 묘사가 올바른 것은?",
-                options: [
-                    "He is wear blue t-shirt.",
-                    "He is wearing a blue t-shirt.",
-                    "He wears is blue t-shirt.",
-                    "He has wearing blue t-shirt."
-                ],
-                correctIndex: 1,
-                hint: "~를 입고 있는 상태는 'be동사 + wearing a + 옷 종류' 구문으로 구성하는 게 매우 정확하단다."
-            },
-            {
-                lessonId: 4,
-                lessonTag: "LESSON 4",
-                type: "scramble",
-                question: "'그는 큰 눈과 큰 코를 가졌어.' 라는 인물 인상착의 묘사를 바르게 완성하세요.",
-                blocks: ["and", "a", "eyes", "big", "nose.", "big", "He", "has"],
-                correctOrder: ["He", "has", "big", "eyes", "and", "a", "big", "nose."],
-                hint: "He has 복수형태(big eyes) + and + 단수형태(a big nose.) 흐름에 맞추어 카드를 고정해봐!"
-            },
-
-            // LESSON 5: I'm Going to Meet My Friends (Questions 17-20)
-            {
-                lessonId: 5,
-                lessonTag: "LESSON 5",
-                type: "scramble",
-                question: "'나는 내일 박물관을 방문할 계획이야.' 미래 계획의 알맞은 카드들을 정해진 위치에 배치하세요.",
-                blocks: ["going", "to", "visit", "the", "museum", "tomorrow.", "I'm"],
-                correctOrder: ["I'm", "going", "to", "visit", "the", "museum", "tomorrow."],
-                hint: "~할 예정이다의 'I'm going to' 뒤에 실제 동사 행동인 'visit'와 그 대상을 뒤이어 배치해봐!"
-            },
-            {
-                lessonId: 5,
-                lessonTag: "LESSON 5",
-                type: "choice",
-                question: "이번 주말 계획을 묻는 질문 'What are you going to do this weekend?'에 대해 영화를 볼 예정이라고 대답할 때 가장 문법적으로 알맞은 문장은?",
-                options: [
-                    "I watch a movie.",
-                    "I'm going to see a movie.",
-                    "I want see a movie.",
-                    "I will saw a movie."
-                ],
-                correctIndex: 1,
-                hint: "질문에서 계획을 위해 'going to do'를 썼으므로, 대답도 계획적인 약속인 'I'm going to see a movie.'로 응답하자!"
-            },
-            {
-                lessonId: 5,
-                lessonTag: "LESSON 5",
-                type: "scramble",
-                question: "'우리는 오늘 방탈출 게임을 할 계획이야.' 라는 열정이 느껴지는 미래 계획 문장을 완성하세요.",
-                blocks: ["the", "room", "play", "going", "We", "escape", "are", "game", "to"],
-                correctOrder: ["We", "are", "going", "to", "play", "the", "room", "escape", "game"],
-                hint: "주어 'We' -> be동사 복수형 'are' -> 미래 조동 표현 'going to' -> 'play' -> 'the room escape game' 순서대로 채워봐!"
-            },
-            {
-                lessonId: 5,
-                lessonTag: "LESSON 5",
-                type: "choice",
-                question: "내일 날씨가 아주 맑아서 공원에서 자전거를 탈 계획을 세우고 있는 민수의 표현으로 가장 적절한 대답을 고르세요.",
-                options: [
-                    "I'm going to ride my bike in the park.",
-                    "I have a sore throat.",
-                    "I'm in the sixth grade.",
-                    "The bike is faster than the car."
-                ],
-                correctIndex: 0,
-                hint: "~할 계획이다의 'be going to'와 '자전거 타다(ride my bike)'가 자연스럽게 결합된 미래형 다짐 문장을 골라보렴!"
-            },
-
-            // LESSON 6: Which Is Bigger? (Questions 21-24)
-            {
-                lessonId: 6,
-                lessonTag: "LESSON 6",
-                type: "scramble",
-                question: "'치타가 거북이보다 더 빠르다.' 두 동물의 속도를 명쾌하게 비교하는 문장을 완성하고 비밀 단서를 푸세요.",
-                blocks: ["is", "faster", "the", "cheetah", "than", "turtle.", "The"],
-                correctOrder: ["The", "cheetah", "is", "faster", "than", "the", "turtle."],
-                hint: "비교급 어순: [A대상: The cheetah] + [is] + [비교급형태: faster] + [~보다: than] + [B대상: the turtle.]"
-            },
-            {
-                lessonId: 6,
-                lessonTag: "LESSON 6",
-                type: "choice",
-                question: "하늘을 나는 비행기(airplane)와 철로 위의 기차(train)의 속도를 올바르게 비교하고자 합니다. 빈칸에 들어갈 알맞은 낱말을 고르세요.\n\"The airplane is ________ than the train.\"",
-                options: [
-                    "faster",
-                    "fastest",
-                    "heavy",
-                    "slower"
-                ],
-                correctIndex: 0,
-                hint: "비행기는 기차보다 '더 빠르다'라는 의미가 되어야 하므로, 빠르다(fast)에 더함을 뜻하는 비교형 어미(-er)가 붙은 단어를 선택하렴."
-            },
-            {
-                lessonId: 6,
-                lessonTag: "LESSON 6",
-                type: "scramble",
-                question: "'내 가방이 너의 가방보다 더 무거워.' 비교급 문장 가방들을 정렬해 봅시다.",
-                blocks: ["bag", "is", "heavier", "than", "My", "your", "bag."],
-                correctOrder: ["My", "bag", "is", "heavier", "than", "your", "bag."],
-                hint: "My bag (나의 가방은) -> is heavier (더 무겁다) -> than (누구보다) -> your bag. (너의 가방보다) 순으로 정리해봐!"
-            },
-            {
-                lessonId: 6,
-                lessonTag: "LESSON 6",
-                type: "choice",
-                question: "'어느 것이 더 크니, 나무와 집 중에서?'라는 질문인 'Which is taller, the tree or the house?'에 대한 알맞은 답변을 고르세요.",
-                options: [
-                    "The tree is tallest.",
-                    "The tree is tall than the house.",
-                    "The tree is taller than the house.",
-                    "The tree is more tall the house."
-                ],
-                correctIndex: 2,
-                hint: "두 대상을 정확히 비교할 때는 비교급 형태인 '~er'과 비교 기준 전치사인 'than'이 세트처럼 항상 어울린단다."
-            }
-        ];
-
         // MASTER GAME STATES
         let studentClass = "";
         let studentNumber = "";
@@ -1004,7 +429,6 @@
         
         let shuffledQuestions = [];
         let currentActiveIndex = 0;
-        let currentLives = 3;
         let currentSelections = [];
 
         // Dynamic 6-character Master Security Password generated per session
@@ -1016,737 +440,916 @@
         let timerInterval = null;
         let totalSecondsElapsed = 0;
 
-        window.onload = function() {
-            initAudio();
-            
-            // Dynamically populate numbers from 1 to 25
-            const numSelect = document.getElementById('input-number');
-            for(let i = 1; i <= 25; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = `${i}번`;
-                numSelect.appendChild(opt);
-            }
+        // SOUND SYSTEM IMPLEMENTATION USING WEB AUDIO API
+        let audioCtx = null;
+        let soundMuted = false;
 
-            // Restore previously entered metadata from localStorage
-            if (localStorage.getItem('6th_escape_class')) {
-                document.getElementById('input-class').value = localStorage.getItem('6th_escape_class');
+        function toggleSound() {
+            soundMuted = !soundMuted;
+            const icon = document.getElementById('sound-icon');
+            if (soundMuted) {
+                icon.className = "fa-solid fa-volume-xmark text-rose-400";
+            } else {
+                icon.className = "fa-solid fa-volume-high text-emerald-400";
             }
-            if (localStorage.getItem('6th_escape_number')) {
-                document.getElementById('input-number').value = localStorage.getItem('6th_escape_number');
-            }
-            if (localStorage.getItem('6th_escape_name_real')) {
-                document.getElementById('input-name').value = localStorage.getItem('6th_escape_name_real');
-            }
-        };
+        }
 
-        // START GAME WORKFLOW
+        function playSound(frequency, type, duration) {
+            if (soundMuted) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type || 'sine';
+                osc.frequency.value = frequency;
+                
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio feedback was blocked or unsupported on this browser:", e);
+            }
+        }
+
+        function playClickSound() { playSound(650, 'sine', 0.08); }
+        
+        function playSuccessSound() {
+            playSound(523.25, 'triangle', 0.12);
+            setTimeout(() => playSound(659.25, 'triangle', 0.12), 80);
+            setTimeout(() => playSound(783.99, 'triangle', 0.25), 160);
+        }
+        
+        function playFailSound() {
+            playSound(180, 'sawtooth', 0.3);
+        }
+        
+        function playCodeRevealSound() {
+            playSound(880, 'sine', 0.08);
+            setTimeout(() => playSound(1046.50, 'sine', 0.12), 60);
+        }
+        
+        function playLevelUpSound() {
+            playSound(523.25, 'sine', 0.1);
+            setTimeout(() => playSound(659.25, 'sine', 0.1), 100);
+            setTimeout(() => playSound(783.99, 'sine', 0.1), 200);
+            setTimeout(() => playSound(1046.50, 'sine', 0.35), 300);
+        }
+
+        // COMPLETE 24 QUESTIONS COMPRISING 1-6 UNITS (4 questions per unit)
+        // Strictly conceptual comprehension and situational dialog - NO structural/syntactical description questions
+        const EXAM_POOL = [
+            // UNIT 1: What Grade Are You In? (학년 묻기)
+            {
+                unit: "Lesson 1",
+                situation: "미국에서 온 전학생 민우가 학년을 물어보는 상황입니다. 알맞은 단어를 선택하세요.",
+                question: "Minwoo: What grade are you in?\nSujin: I'm in the _______ grade.",
+                options: ["sixth", "six", "sixteen", "first"],
+                answer: "sixth",
+                hint: "학년을 표현할 때는 기수(one, two)가 아닌 순서를 나타내는 서수(first, second, third... sixth)를 사용해야 해! 6학년은 sixth grade란다."
+            },
+            {
+                unit: "Lesson 1",
+                situation: "새 학기 첫날, 길에서 주원이가 처음 만난 학생의 학년이 궁금해서 질문을 하려고 합니다. 알맞은 문장은 무엇일까요?",
+                question: "주원: _________________________________",
+                options: [
+                    "What grade are you in?",
+                    "What's your favorite subject?",
+                    "Where are you from?",
+                    "How old are you?"
+                ],
+                answer: "What grade are you in?",
+                hint: "상대방이 몇 학년인지 물어보고 싶을 때는 'What grade are you in?'이라고 정중하게 물어볼 수 있어."
+            },
+            {
+                unit: "Lesson 1",
+                situation: "대화를 읽고, 그림 속에 등장하는 대희(Daehee)의 실제 학년을 찾으세요.",
+                question: "A: What grade is Daehee in?\nB: He is in the fifth grade.",
+                options: ["5학년", "6학년", "4학년", "3학년"],
+                answer: "5학년",
+                hint: "fifth는 숫자 5를 순서로 나타내는 서수 표현이야. 따라서 대희는 5학년이라는 의미지!"
+            },
+            {
+                unit: "Lesson 1",
+                situation: "외국인 친구가 'Are you in the sixth grade?'라고 물었을 때, 여러분의 상황에 맞는 알맞은 답변을 고르세요.",
+                question: "Friend: Are you in the sixth grade?\nYou: ___________________________",
+                options: [
+                    "Yes, I am. I'm in the sixth grade.",
+                    "No, I am in the fifth grade.",
+                    "Yes, I am twelve years old.",
+                    "No, I don't like English."
+                ],
+                answer: "Yes, I am. I'm in the sixth grade.",
+                hint: "Are you in the sixth grade?는 '너는 6학년이니?'라고 묻는 질문이야. 6학년 학생이라면 'Yes, I am. I'm in the sixth grade.'가 완벽한 대답이야."
+            },
+
+            // UNIT 2: I Have a Cold. (아픈 증상과 제안)
+            {
+                unit: "Lesson 2",
+                situation: "지훈이가 머리를 감싸 쥐고 괴로워하고 있습니다. 지훈이의 상태에 맞는 알맞은 답변은?",
+                question: "Teacher: What's the matter?\nJihoon: I have a _______.",
+                options: ["headache", "toothache", "runny nose", "sore throat"],
+                answer: "headache",
+                hint: "머리가 아픈 아픔을 나타내는 단어는 head(머리)와 ache(통증)가 합쳐진 'headache'(두통) 란다."
+            },
+            {
+                unit: "Lesson 2",
+                situation: "목이 심하게 붓고 아픈 지우에게 Rebecca 선생님이 줄 수 있는 조언으로 가장 적절한 대화를 완성해 보세요.",
+                question: "Jiwoo: I have a sore throat.\nRebecca: ________________________",
+                options: [
+                    "Drink warm water and get some rest.",
+                    "Go out and play soccer with friends.",
+                    "Eat some sweet cold ice cream.",
+                    "Watch a scary movie tonight."
+                ],
+                answer: "Drink warm water and get some rest.",
+                hint: "목이 아플 때(sore throat)는 따뜻한 물(warm water)을 자주 마시고 편안히 쉬는 것(get some rest)이 최고의 대안이지."
+            },
+            {
+                unit: "Lesson 2",
+                situation: "치과 복도에서 은우와 의사 선생님의 대화입니다. 은우의 증상에 걸맞은 문장을 완성하세요.",
+                question: "Doctor: What's wrong, Eunwoo?\nEunwoo: I can't eat food. I have a severe _______.",
+                options: ["toothache", "stomachache", "headache", "cold"],
+                answer: "toothache",
+                hint: "음식을 씹을 수 없고 이가 너무 아픈 증상은 tooth(치아)와 ache가 만난 'toothache'(치통)야."
+            },
+            {
+                unit: "Lesson 2",
+                situation: "지독한 독감에 걸려서 열이 펄펄 끓고 있는 친구에게 제안할 말로 가장 알맞은 단어는?",
+                question: "Take some _______ and go to bed early.",
+                options: ["medicine", "homework", "sugar", "candy"],
+                answer: "medicine",
+                hint: "몸이 많이 아플 때는 처방된 약을 복용하는 것이 좋겠지? '약을 먹다'는 표현은 'Take some medicine'이라고 해."
+            },
+
+            // UNIT 3: When Is the School Market? (행사 날짜 묻기)
+            {
+                unit: "Lesson 3",
+                situation: "가을에 열리는 학교 장터 날짜를 묻고 대답하는 장면입니다. 빈칸에 들어갈 알맞은 월 이름은?",
+                question: "A: When is the school market?\nB: It's on _______ 15th. It's in Autumn.",
+                options: ["October", "March", "January", "April"],
+                answer: "October",
+                hint: "가을에 열리는 달을 선택해야 해! October는 선선한 가을인 10월을 의미한단다."
+            },
+            {
+                unit: "Lesson 3",
+                situation: "생일 파티 날짜가 5월 12일이라고 말하고자 합니다. 날짜를 서수 형태로 완벽히 올바르게 표현한 것은 무엇일까요?",
+                question: "A: When is your birthday?\nB: It's on _______.",
+                options: ["May twelfth", "May twelve", "March twelve", "May second"],
+                answer: "May twelfth",
+                hint: "12일은 그냥 twelve가 아니라 서수인 'twelfth'로 표현해야 완벽해. 월 이름은 5월인 May란다."
+            },
+            {
+                unit: "Lesson 3",
+                situation: "체육대회(Sports Day)가 10월 3일에 열립니다. 3일에 매칭될 알맞은 서수 표기형은?",
+                question: "Sports Day is on October _______.",
+                options: ["3rd", "3st", "3nd", "3th"],
+                answer: "3rd",
+                hint: "날짜의 1일은 1st, 2일은 2nd, 3일은 3rd로 약칭을 적어. 3일은 third이므로 '3rd'가 정답이야!"
+            },
+            {
+                unit: "Lesson 3",
+                situation: "달력을 보니 이번 크리스마스 행사가 12월 25일에 예정되어 있습니다. 날짜 표현으로 가장 올바른 대화를 찾으세요.",
+                question: "When is the Christmas concert?\nIt's on _______.",
+                options: [
+                    "December twenty-fifth",
+                    "December twenty-five",
+                    "November twenty-fifth",
+                    "December twenty-four"
+                ],
+                answer: "December twenty-fifth",
+                hint: "12월은 December이고, 날짜인 25일은 서수로 twenty-fifth라고 발음한단다."
+            },
+
+            // UNIT 4: He Has Short Curly Hair. (인물 외모 묘사)
+            {
+                unit: "Lesson 4",
+                situation: "경찰관이 몽타주를 그리며 목격자에게 용의자의 안경 착용 여부를 물어보고 있습니다. 알맞은 대답은?",
+                question: "Officer: What does he look like?\nWitness: He has brown eyes and __________________.",
+                options: [
+                    "he is wearing glasses",
+                    "he likes playing games",
+                    "he has a cute dog",
+                    "he is wearing blue shoes"
+                ],
+                answer: "he is wearing glasses",
+                hint: "외모 특징 중 '안경을 쓰고 있다'는 표현은 'wear' 동사를 활용해 'is wearing glasses'라고 묘사할 수 있어."
+            },
+            {
+                unit: "Lesson 4",
+                situation: "소개해 줄 여동생의 머리 스타일을 설명하는 모습입니다. 'She has long straight hair.'를 한국어로 바르게 옮겨놓은 것은?",
+                question: "Emma: What does your sister look like?\nMinho: She has long straight hair.",
+                options: [
+                    "그녀는 긴 생머리를 가지고 있어.",
+                    "그녀는 짧은 파마머리를 가지고 있어.",
+                    "그녀는 노란 곱슬머리를 가지고 있어.",
+                    "그녀는 긴 파마머리를 가지고 있어."
+                ],
+                answer: "그녀는 긴 생머리를 가지고 있어.",
+                hint: "long은 '긴', straight는 일자로 쭉 뻗은 '생머리'를 의미한단다."
+            },
+            {
+                unit: "Lesson 4",
+                situation: "다음 영어 설명을 읽고 일치하는 인물의 모습을 보기에서 고르세요.",
+                question: "Description: She is tall and has short curly hair.",
+                options: [
+                    "키가 크고 짧은 곱슬머리를 한 사람",
+                    "키가 작고 긴 곱슬머리를 한 사람",
+                    "키가 크고 짧은 생머리를 한 사람",
+                    "키가 작고 안경을 쓴 사람"
+                ],
+                answer: "키가 크고 짧은 곱슬머리를 한 사람",
+                hint: "tall은 '키가 큰', short는 '짧은', curly는 복슬복슬한 '곱슬머리'를 지칭하지!"
+            },
+            {
+                unit: "Lesson 4",
+                situation: "새 짝꿍의 인상착의를 묻고 답하는 상황입니다. 파란색 눈을 가진 소년을 표현하기 위해 빈칸에 들어갈 전형적인 영어 표현은?",
+                question: "A: What does he look like?\nB: He is tall and he _______ blue eyes.",
+                options: ["has", "is", "wear", "looks"],
+                answer: "has",
+                hint: "신체 부위나 눈동자 색, 머리 모양을 가지고 있을 때는 'have' 또는 주어가 He나 She일 때는 'has'를 동사로 쓴단다."
+            },
+
+            // UNIT 5: What Are You Going to Do on Saturday? (미래 계획)
+            {
+                unit: "Lesson 5",
+                situation: "주말 계획을 궁금해하는 유나에게, 이번 주말에 할머니 댁을 방문할 예정이라고 말하고 싶습니다. 알맞은 단어 조합은?",
+                question: "Yuna: What are you going to do this Saturday?\nDongsu: I'm going to _______ my grandparents.",
+                options: ["visit", "visiting", "visited", "visits"],
+                answer: "visit",
+                hint: "~할 계획이다라는 'going to' 뒤에는 가고자 하는 행동을 뜻하는 기본 행동 단어(동사원형)인 'visit'가 와야 어울려!"
+            },
+            {
+                unit: "Lesson 5",
+                situation: "오후에 재미있는 영화를 볼 것이라는 미래 계획을 세웠습니다. 알맞은 문장을 완성해 보세요.",
+                question: "What are you going to do this afternoon?\nI'm ___________________________.",
+                options: [
+                    "going to watch a movie",
+                    "watching a movie",
+                    "watched a movie yesterday",
+                    "like to watch a movie"
+                ],
+                answer: "going to watch a movie",
+                hint: "~할 예정이다라는 미래 계획을 질문받았으므로 'I'm going to' 뒤에 동작 'watch a movie'를 붙여 답변하면 완벽하지."
+            },
+            {
+                unit: "Lesson 5",
+                situation: "이번 주 일요일에 박물관으로 견학 여행을 갈 계획인 진수가 할 대답을 고르세요.",
+                question: "A: What are you going to do on Sunday?\nJinsoo: I'm going to go to the _______.",
+                options: ["museum", "market", "concert", "hospital"],
+                answer: "museum",
+                hint: "박물관을 영어로 지칭하는 대표적인 어휘는 바로 'museum'이란다."
+            },
+            {
+                unit: "Lesson 5",
+                situation: "친구들이 방학 계획을 서로 이야기하고 있습니다. 'I'm going to join a space camp.'라는 말이 나타내는 뜻은?",
+                question: "Jiwoo: I'm going to join a space camp.",
+                options: [
+                    "나는 우주 캠프에 참여할 예정이야.",
+                    "나는 수영 캠프에 참가하고 싶어.",
+                    "나는 어제 우주 캠프에 다녀왔어.",
+                    "나는 컴퓨터 자격증을 딸 계획이야."
+                ],
+                answer: "나는 우주 캠프에 참여할 예정이야.",
+                hint: "join은 '참여하다, 가입하다'이고 space camp는 '우주 캠프'를 의미하므로, 이 둘이 조합된 미래의 계획을 나타낸단다."
+            },
+
+            // UNIT 6: Which One Is Cheaper? (비교하기)
+            {
+                unit: "Lesson 6",
+                situation: "가게에서 두 개의 가방 중 어느 것이 더 저렴한지 물어보고 싶습니다. 알맞은 질문을 골라주세요.",
+                question: "Yuna: ___________________________\nClerk: The blue bag is cheaper than the red one.",
+                options: [
+                    "Which bag is cheaper?",
+                    "Which bag is bigger?",
+                    "How much is this blue bag?",
+                    "Which bag do you like?"
+                ],
+                answer: "Which bag is cheaper?",
+                hint: "더 저렴한 것을 골라 비교해보고 싶을 때는 '어느~'를 뜻하는 Which와 '더 저렴한'을 뜻하는 cheaper를 결합한 'Which bag is cheaper?'라고 질문하지."
+            },
+            {
+                unit: "Lesson 6",
+                situation: "장난감 코너에서 두 인형의 크기를 비교하고 있습니다. 노란 곰인형이 핑크 곰인형보다 더 작다는 문장을 완성해 보세요.",
+                question: "The yellow bear is _______ than the pink bear.",
+                options: ["smaller", "small", "cheaper", "bigger"],
+                answer: "smaller",
+                hint: "두 대상을 비교하여 '더 작은'이라는 표현을 완성할 때는 뒤에 er을 붙인 'smaller'를 사용하고, ~보다라는 뜻인 'than'과 매칭하지."
+            },
+            {
+                unit: "Lesson 6",
+                situation: "코끼리와 호랑이 중 어느 쪽이 더 무거운지 대화하고 있습니다. 알맞은 단어는?",
+                question: "A: Which animal is heavier?\nB: The elephant is _______ than the tiger.",
+                options: ["heavier", "heavy", "lighter", "faster"],
+                answer: "heavier",
+                hint: "코끼리가 호랑이보다 더 무거우므로 '더 무거운'을 의미하는 비교 어휘 'heavier'가 들어가야 정답이 된단다."
+            },
+            {
+                unit: "Lesson 6",
+                situation: "두 바지 길이를 비교하고 있습니다. 파란 바지가 검정 바지보다 더 길다는 올바른 문장을 고르세요.",
+                question: "Compare the pants:",
+                options: [
+                    "The blue pants are longer than the black pants.",
+                    "The blue pants are shorter than the black pants.",
+                    "The blue pants are cheaper than the black pants.",
+                    "The blue pants are bigger than the black pants."
+                ],
+                answer: "The blue pants are longer than the black pants.",
+                hint: "더 길다는 뜻을 비교하기 위해서는 '더 긴'을 나타내는 'longer'를 사용한 문장이 알맞아."
+            }
+        ];
+
+        // Global variables for rankings fetched from Firebase
+        let leaderboardData = [];
+        let currentClassFilter = 'all';
+        let currentSortOrder = 'time'; // 'time' or 'latest'
+
+        // FIREBASE SETUP WITH PRESET RUNTIME GLOBAL VARS
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'magic-classroom-escape-v1';
+        let db = null;
+        let auth = null;
+
+        async function initFirebaseAndAuth() {
+            if (typeof __firebase_config !== 'undefined') {
+                try {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    firebase.initializeApp(firebaseConfig);
+                    auth = firebase.auth();
+                    db = firebase.firestore();
+
+                    // Step 1: Sign in with token priority, fallback to Anonymous
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await auth.signInWithCustomToken(__initial_auth_token);
+                    } else {
+                        await auth.signInAnonymously();
+                    }
+                    console.log("Firebase Authenticated as UID:", auth.currentUser?.uid);
+
+                    // Step 2: Establish Realtime database listener
+                    listenToLeaderboard();
+                } catch (err) {
+                    console.error("Firebase init failed, running in sandbox mode:", err);
+                }
+            } else {
+                console.warn("No firebase configurations detected. Leaderboard will run offline.");
+            }
+        }
+
+        // GENERATE UNIQUE SESSION PASSWORD FOR EACH USER (6 Letters & Digits)
+        function generateSessionPassword() {
+            const charset = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Avoid ambiguous O, I, 0, 1
+            let result = "";
+            for (let i = 0; i < 6; i++) {
+                const randIndex = Math.floor(Math.random() * charset.length);
+                result += charset[randIndex];
+            }
+            return result;
+        }
+
+        // START GAME: INITIAL VALIDATION & GAME LOOP SETUP
         function startGame() {
-            const classVal = document.getElementById('input-class').value;
-            const numberVal = document.getElementById('input-number').value;
-            const nameInput = document.getElementById('input-name').value.trim();
+            const classSelect = document.getElementById('input-class');
+            const numberSelect = document.getElementById('input-number');
+            const nameInput = document.getElementById('input-name');
 
-            if (!classVal) {
-                showFeedbackBanner("⚠️ 반드시 본인의 학급(반)을 선택해야 게임 시작이 가능합니다!", false);
-                playFailSound();
+            if (!classSelect.value) {
+                alert("반을 먼저 선택해주세요!");
+                classSelect.focus();
                 return;
             }
-            if (!numberVal) {
-                showFeedbackBanner("⚠️ 반드시 본인의 학급 번호를 선택해야 게임 시작이 가능합니다!", false);
-                playFailSound();
+            if (!numberSelect.value) {
+                alert("번호를 먼저 선택해주세요!");
+                numberSelect.focus();
                 return;
             }
-            if (!nameInput) {
-                showFeedbackBanner("⚠️ 반드시 실제 이름(실명)을 입력해야 수료증 발급과 미션 시작이 가능합니다!", false);
-                playFailSound();
+            studentName = nameInput.value.trim();
+            if (!studentName || studentName.length < 2) {
+                alert("수료증에 기록될 자신의 실명을 정확하게 적어주세요! (최소 2자 이상)");
+                nameInput.focus();
                 return;
             }
 
-            studentClass = classVal;
-            studentNumber = numberVal;
-            studentName = nameInput;
+            studentClass = classSelect.value;
+            studentNumber = numberSelect.value;
 
-            // Save in storage
+            // Cache credentials locally for student comfort
             localStorage.setItem('6th_escape_class', studentClass);
             localStorage.setItem('6th_escape_number', studentNumber);
             localStorage.setItem('6th_escape_name_real', studentName);
 
-            // Generate Master Password for this session (Unique 6 alphanumeric digits)
-            generateRandomMasterCode();
+            // Generate unique escape channel for school live leaderboard
+            const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+            const channelId = `CH-${studentName}-${randomSuffix}`;
+            document.getElementById('user-channel-id').innerText = channelId;
+            document.getElementById('live-channel-badge').classList.remove('hidden');
 
-            // Create a personalized unique decryption frequency to clearly show each room is different
-            const randomFrequency = Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('unique-channel-tag').innerText = `주파수: CH-${studentClass}반-${studentNumber}번-${randomFrequency}`;
-
-            let tempPool = [...ALL_QUESTIONS_POOL];
-            shuffleArray(tempPool);
-            shuffledQuestions = tempPool.slice(0, 24); // Select all 24 questions for the full 15-minute course
-
-            // Reset States
-            currentActiveIndex = 0;
-            currentLives = 3;
+            // Set session randomized passwords
+            generatedMasterCode = generateSessionPassword();
             unlockedCodeSlots = ["-", "-", "-", "-", "-", "-"];
-            currentSelections = [];
-            totalSecondsElapsed = 0;
+            userEnteredCode = "";
+            document.getElementById('entered-pin-display').innerText = "------";
 
-            // Start clock
+            // Prepare questions (shuffled to increase replayability and stop cheating)
+            shuffledQuestions = [...EXAM_POOL];
+            shuffledQuestions.sort(() => Math.random() - 0.5);
+
+            currentActiveIndex = 0;
+            currentSelections = [];
+
+            // Setup audio system trigger on first click
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            } catch (e) {}
+
+            // Open Escape layout
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-game').classList.remove('hidden');
+
+            // Start timer
             startTimer();
 
-            // Render Slots inside dashboard clue-book
-            updateClueBookUI();
+            // Render HUD elements
+            document.getElementById('badge-user-info').innerText = `6학년 ${studentClass}반 ${studentNumber}번 ${studentName} 대원`;
+            renderLockDashboard();
+            renderClueNotebook();
+            renderQuestion();
+            renderKeypad();
 
-            // Transition UI
-            document.getElementById('game-timer-badge').classList.remove('hidden');
-            transitionScreen('step-register', 'step-challenge');
-
-            // Load first question from shuffled array
-            loadActiveQuestion();
             playLevelUpSound();
         }
 
-        // Generate session-specific 6-character Password
-        function generateRandomMasterCode() {
-            const allowedLetters = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // Clear readable uppercase letters
-            const allowedDigits = "23456789"; // No confusing 0/1/O/I
-            
-            let code = "";
-            for (let i = 0; i < 6; i++) {
-                if (i % 2 === 0) {
-                    code += allowedLetters.charAt(Math.floor(Math.random() * allowedLetters.length));
-                } else {
-                    code += allowedDigits.charAt(Math.floor(Math.random() * allowedDigits.length));
-                }
-            }
-            generatedMasterCode = code;
-        }
-
-        // Standard Shuffle Algorithm
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        // Screen transition utility
-        function transitionScreen(fromId, toId) {
-            document.getElementById(fromId).classList.add('hidden');
-            document.getElementById(toId).classList.remove('hidden');
-        }
-
-        // Escape Timer Clock
+        // TIMER FUNCTIONS
         function startTimer() {
+            totalSecondsElapsed = 0;
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 totalSecondsElapsed++;
-                const minutes = Math.floor(totalSecondsElapsed / 60);
-                const seconds = totalSecondsElapsed % 60;
-                
-                const minStr = minutes < 10 ? '0' + minutes : minutes;
-                const secStr = seconds < 10 ? '0' + seconds : seconds;
-                
-                document.getElementById('elapsed-time-text').innerText = `${minStr}:${secStr}`;
+                const mins = Math.floor(totalSecondsElapsed / 60).toString().padStart(2, '0');
+                const secs = (totalSecondsElapsed % 60).toString().padStart(2, '0');
+                document.getElementById('game-timer').innerText = `${mins}:${secs}`;
             }, 1000);
         }
 
-        function stopTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-        }
-
-        // Update Clue Notebook UI Slots
-        function updateClueBookUI() {
-            for (let i = 0; i < 6; i++) {
-                const slotEl = document.getElementById(`code-slot-${i}`);
-                if (slotEl) {
-                    slotEl.innerText = unlockedCodeSlots[i];
-                    if (unlockedCodeSlots[i] !== "-") {
-                        slotEl.classList.add('text-amber-400', 'neon-text');
-                        slotEl.classList.remove('text-emerald-400');
-                    } else {
-                        slotEl.classList.remove('text-amber-400', 'neon-text');
-                        slotEl.classList.add('text-emerald-400');
-                    }
-                }
-            }
-        }
-
-        // LOAD AND RENDER ACTIVE SHUFFLED QUESTION
-        function loadActiveQuestion() {
-            const quiz = shuffledQuestions[currentActiveIndex];
-            
-            // Progress Bar text (up to 24)
-            document.getElementById('quiz-progress-text').innerText = `${currentActiveIndex + 1} / 24 단서 해결`;
-
-            renderLives();
-            hideFeedbackBanner();
-            currentSelections = [];
-
-            // Set dynamic walkie-talkie bubble message
-            const walkieBubble = document.getElementById('teacher-bubble');
-            walkieBubble.innerHTML = `치이익- 힘내렴! 현재 단서 지점은 <span class="text-amber-400 font-bold font-mono">[${quiz.lessonTag}]</span> 관련 장치야. 힌트 요청 단추를 활성화해 둘게!`;
-
-            const mainContent = document.getElementById('game-main-content');
-            mainContent.innerHTML = ''; // Reset
-
-            // Create title
-            const questionTitle = document.createElement('div');
-            questionTitle.className = "mb-4 space-y-2";
-            questionTitle.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold px-2.5 py-0.5 rounded-full font-mono">${quiz.lessonTag} 출현</span>
-                    <span class="text-xs text-slate-500">단서 장치 ${currentActiveIndex + 1}</span>
-                </div>
-                <h4 class="text-base md:text-lg font-bold text-slate-100 leading-relaxed">${quiz.question}</h4>
-            `;
-            mainContent.appendChild(questionTitle);
-
-            // Render by type
-            if (quiz.type === "scramble") {
-                renderScrambleQuiz(quiz, mainContent);
-            } else if (quiz.type === "choice") {
-                renderChoiceQuiz(quiz, mainContent);
-            } else if (quiz.type === "visual-choice") {
-                renderVisualChoiceQuiz(quiz, mainContent);
-            }
-        }
-
-        // RENDER 1: WORD SCRAMBLE INTERFACE
-        function renderScrambleQuiz(quiz, container) {
-            const wrapper = document.createElement('div');
-            wrapper.className = "space-y-4 pt-2";
-
-            const displayArea = document.createElement('div');
-            displayArea.id = "scramble-display";
-            displayArea.className = "min-h-[70px] bg-slate-900 border-2 border-dashed border-slate-800 rounded-xl p-3 flex flex-wrap gap-2 items-center justify-center transition-all";
-            displayArea.innerHTML = `<span class="text-slate-500 text-xs font-semibold"><i class="fa-solid fa-code-merge mr-1"></i>단어 블록을 차례대로 클릭하여 문장을 알맞게 연결하세요.</span>`;
-            wrapper.appendChild(displayArea);
-
-            const blocksContainer = document.createElement('div');
-            blocksContainer.className = "flex flex-wrap gap-2 justify-center pt-3";
-
-            // Shuffle blocks once for rendering
-            const shuffledBlocks = [...quiz.blocks];
-            shuffledBlocks.sort(() => 0.5 - Math.random());
-
-            shuffledBlocks.forEach((word) => {
-                const btn = document.createElement('button');
-                btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold border border-slate-700 py-2.5 px-4 rounded-xl text-sm transition-all transform active:scale-95";
-                btn.innerText = word;
-                btn.onclick = () => {
-                    playClickSound();
-                    selectScrambleWord(word, btn, quiz);
-                };
-                blocksContainer.appendChild(btn);
+        // RENDER CENTRAL LOCK INTERFACE & PROGRESSION
+        function renderLockDashboard() {
+            const container = document.getElementById('master-lock-slots');
+            container.innerHTML = "";
+            unlockedCodeSlots.forEach((char, idx) => {
+                const box = document.createElement('span');
+                box.className = `w-6 h-8 flex items-center justify-center border rounded font-bold font-digital ${
+                    char !== '-' 
+                    ? 'border-emerald-500 bg-emerald-950/40 text-emerald-400 neon-text-green animate-bounce' 
+                    : 'border-slate-800 bg-slate-950 text-slate-700'
+                }`;
+                box.innerText = char;
+                container.appendChild(box);
             });
-            wrapper.appendChild(blocksContainer);
-
-            // Control Buttons
-            const controlRow = document.createElement('div');
-            controlRow.className = "flex justify-center gap-3 pt-6 border-t border-slate-900 mt-4";
-
-            const clearBtn = document.createElement('button');
-            clearBtn.className = "bg-slate-900 hover:bg-slate-800 text-slate-400 font-semibold px-4 py-2 rounded-lg text-xs transition-all border border-slate-800";
-            clearBtn.innerHTML = `<i class="fa-solid fa-arrow-rotate-left mr-1"></i> 다시 정렬`;
-            clearBtn.onclick = () => {
-                playClickSound();
-                loadActiveQuestion();
-            };
-            controlRow.appendChild(clearBtn);
-
-            const submitBtn = document.createElement('button');
-            submitBtn.className = "bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2 rounded-lg text-xs shadow transition-all border border-emerald-500";
-            submitBtn.innerHTML = `정답 단서 검증 <i class="fa-solid fa-paper-plane ml-1"></i>`;
-            submitBtn.onclick = () => {
-                checkScrambleAnswer(quiz);
-            };
-            controlRow.appendChild(submitBtn);
-
-            wrapper.appendChild(controlRow);
-            container.appendChild(wrapper);
         }
 
-        function selectScrambleWord(word, btnEl, quiz) {
-            const displayArea = document.getElementById('scramble-display');
-            if (currentSelections.length === 0) {
-                displayArea.innerHTML = '';
+        function renderClueNotebook() {
+            const container = document.getElementById('clue-decryption-boxes');
+            container.innerHTML = "";
+            for (let i = 0; i < 6; i++) {
+                const char = unlockedCodeSlots[i];
+                const box = document.createElement('div');
+                box.className = `p-3 rounded-xl border text-center relative ${
+                    char !== '-' 
+                    ? 'border-amber-500/50 bg-amber-950/20 text-amber-400' 
+                    : 'border-slate-800 bg-slate-950 text-slate-600'
+                }`;
+                
+                const indexLabel = document.createElement('span');
+                indexLabel.className = "absolute top-1 left-2 text-[8px] text-slate-500 font-digital";
+                indexLabel.innerText = `#${i + 1}`;
+                box.appendChild(indexLabel);
+
+                const valueText = document.createElement('span');
+                valueText.className = "font-digital font-extrabold text-xl block mt-1";
+                valueText.innerText = char !== '-' ? char : '?';
+                box.appendChild(valueText);
+
+                container.appendChild(box);
             }
-
-            if (btnEl.classList.contains('opacity-30')) return;
-
-            btnEl.classList.add('opacity-30', 'pointer-events-none');
-            currentSelections.push({ word: word, button: btnEl });
-
-            const wordTag = document.createElement('span');
-            wordTag.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold py-1.5 px-3 rounded-lg text-sm transition-all cursor-pointer hover:bg-emerald-500/20";
-            wordTag.innerText = word;
-            
-            wordTag.onclick = () => {
-                playClickSound();
-                const index = currentSelections.findIndex(item => item.word === word);
-                if (index > -1) {
-                    currentSelections[index].button.classList.remove('opacity-30', 'pointer-events-none');
-                    currentSelections.splice(index, 1);
-                    renderScrambleDisplay();
-                }
-            };
-            displayArea.appendChild(wordTag);
         }
 
-        function renderScrambleDisplay() {
-            const displayArea = document.getElementById('scramble-display');
-            displayArea.innerHTML = '';
+        // RENDER REPETITIVE QUESTIONS
+        function renderQuestion() {
+            const q = shuffledQuestions[currentActiveIndex];
+            
+            // Set Progress bar
+            const percent = ((currentActiveIndex) / shuffledQuestions.length) * 100;
+            document.getElementById('progress-bar-inner').style.width = `${percent}%`;
 
-            if (currentSelections.length === 0) {
-                displayArea.innerHTML = `<span class="text-slate-500 text-xs font-semibold"><i class="fa-solid fa-code-merge mr-1"></i>단어 블록을 차례대로 클릭하여 문장을 알맞게 연결하세요.</span>`;
+            document.getElementById('current-question-unit-label').innerText = `${q.unit}`;
+            document.getElementById('question-index-counter').innerText = `${currentActiveIndex + 1} / ${shuffledQuestions.length}`;
+            document.getElementById('question-situation-box').innerHTML = `<span class="text-emerald-400 font-bold">[상황]</span> ${q.situation}`;
+            document.getElementById('question-english-text').innerHTML = q.question.replace(/\n/g, '<br>');
+
+            // Clean previous alert
+            const alertBanner = document.getElementById('answer-alert-banner');
+            alertBanner.className = "hidden";
+
+            // Options container
+            const optContainer = document.getElementById('question-options-container');
+            optContainer.innerHTML = "";
+
+            // Create shuffled options mapping
+            const originalOpts = [...q.options];
+            // Render
+            originalOpts.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-slate-950 border border-slate-800 hover:border-emerald-500/50 p-3.5 rounded-xl text-xs hover:bg-slate-900 transition flex items-center justify-between group";
+                btn.onclick = () => checkAnswer(opt, btn);
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-emerald-400 transition text-[10px]"></i>
+                `;
+                optContainer.appendChild(btn);
+            });
+        }
+
+        // VERIFY ANSWERS
+        function checkAnswer(selectedOption, buttonElement) {
+            const q = shuffledQuestions[currentActiveIndex];
+            const alertBanner = document.getElementById('answer-alert-banner');
+            
+            if (selectedOption === q.answer) {
+                // Correct
+                playSuccessSound();
+                buttonElement.className = "w-full text-left bg-emerald-950/40 border border-emerald-500 p-3.5 rounded-xl text-xs text-emerald-400 transition flex items-center justify-between";
+                buttonElement.innerHTML = `<span>${selectedOption}</span> <i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                
+                alertBanner.className = "mt-4 p-3 rounded-xl text-xs flex items-center space-x-2 bg-emerald-950/30 border border-emerald-500/30 text-emerald-300";
+                alertBanner.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>훌륭합니다! 정답입니다.</span>`;
+
+                // Proceed next or decryption check
+                setTimeout(() => {
+                    currentActiveIndex++;
+                    
+                    // Decrypt slots at specific checkpoints (every 4 solved questions -> 24/4 = 6 slots)
+                    const unlockLevel = Math.floor(currentActiveIndex / 4);
+                    for (let i = 0; i < unlockLevel; i++) {
+                        if (unlockedCodeSlots[i] === '-') {
+                            unlockedCodeSlots[i] = generatedMasterCode[i];
+                            playCodeRevealSound();
+                        }
+                    }
+
+                    renderLockDashboard();
+                    renderClueNotebook();
+
+                    if (currentActiveIndex < shuffledQuestions.length) {
+                        renderQuestion();
+                    } else {
+                        // Complete all 24 questions, fully unlocked code
+                        for (let i = 0; i < 6; i++) {
+                            unlockedCodeSlots[i] = generatedMasterCode[i];
+                        }
+                        renderLockDashboard();
+                        renderClueNotebook();
+                        
+                        // Change question board into an notification
+                        document.getElementById('puzzle-box').innerHTML = `
+                            <div class="text-center py-10 space-y-4">
+                                <span class="text-5xl">🔐</span>
+                                <h3 class="text-xl font-game text-yellow-400">24개 전구간의 아날로그 자물쇠 해독 완료!</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+                                    대단합니다! 모든 융합복습 구간을 정복하셨습니다.<br>
+                                    해독 수첩을 참고해 6자리 영문/숫자 보안키를 우측 <strong>[중앙 비상 탈출구 키패드]</strong>에 마저 입력해야 문이 열립니다!
+                                </p>
+                            </div>
+                        `;
+                    }
+                }, 1000);
+
+            } else {
+                // Incorrect
+                playFailSound();
+                buttonElement.className = "w-full text-left bg-rose-950/40 border border-rose-500 p-3.5 rounded-xl text-xs text-rose-400 transition flex items-center justify-between";
+                buttonElement.innerHTML = `<span>${selectedOption}</span> <i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+
+                alertBanner.className = "mt-4 p-3 rounded-xl text-xs flex items-center space-x-2 bg-rose-950/30 border border-rose-500/30 text-rose-300 animate-bounce";
+                alertBanner.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>틀렸습니다! 우측의 Rebecca 쌤의 힌트 찬스를 써보세요.</span>`;
+            }
+        }
+
+        // REQUEST DIALOG HINT
+        function requestHint() {
+            playClickSound();
+            const q = shuffledQuestions[currentActiveIndex];
+            if (!q) {
+                document.getElementById('hint-modal-text').innerText = "이미 모든 구간을 해독했습니다! 우측 탈출 도어 장치에서 자물쇠 암호를 입력해 탈출하세요!";
+                document.getElementById('hint-modal').classList.remove('hidden');
                 return;
             }
-
-            currentSelections.forEach((item) => {
-                const wordTag = document.createElement('span');
-                wordTag.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold py-1.5 px-3 rounded-lg text-sm transition-all cursor-pointer hover:bg-emerald-500/20";
-                wordTag.innerText = item.word;
-                
-                wordTag.onclick = () => {
-                    playClickSound();
-                    const index = currentSelections.findIndex(x => x.word === item.word);
-                    if (index > -1) {
-                        item.button.classList.remove('opacity-30', 'pointer-events-none');
-                        currentSelections.splice(index, 1);
-                        renderScrambleDisplay();
-                    }
-                };
-                displayArea.appendChild(wordTag);
-            });
+            document.getElementById('hint-modal-text').innerText = q.hint;
+            document.getElementById('hint-modal').classList.remove('hidden');
         }
 
-        function checkScrambleAnswer(quiz) {
-            const entered = currentSelections.map(item => item.word).join(" ");
-            const correct = quiz.correctOrder.join(" ");
-
-            if (entered === correct) {
-                handleQuestionSuccess();
-            } else {
-                handleQuestionFailure();
-            }
-        }
-
-        // RENDER 2: CHOICE QUESTION INTERFACE
-        function renderChoiceQuiz(quiz, container) {
-            const wrapper = document.createElement('div');
-            wrapper.className = "space-y-2.5 pt-2";
-
-            quiz.options.forEach((option, idx) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left bg-slate-900 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 p-4 rounded-xl font-bold text-slate-300 transition-all flex items-center gap-3.5 shadow-sm active:scale-[0.99]";
-                btn.innerHTML = `
-                    <span class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-xs font-mono border border-slate-700">${idx + 1}</span>
-                    <span class="text-sm md:text-base">${option}</span>
-                `;
-                btn.onclick = () => {
-                    verifyChoiceAnswer(idx, quiz.correctIndex);
-                };
-                wrapper.appendChild(btn);
-            });
-
-            container.appendChild(wrapper);
-        }
-
-        // RENDER 3: VISUAL CHOICE INTERFACE
-        function renderVisualChoiceQuiz(quiz, container) {
-            const wrapper = document.createElement('div');
-            wrapper.className = "space-y-3 pt-2";
-
-            const grid = document.createElement('div');
-            grid.className = "grid grid-cols-1 md:grid-cols-3 gap-3";
-
-            quiz.options.forEach((opt, idx) => {
-                const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 hover:border-emerald-500/40 rounded-xl p-4 text-center cursor-pointer transition-all flex flex-col justify-between items-center group shadow-sm hover:shadow-emerald-500/10";
-                card.innerHTML = `
-                    <div class="w-16 h-16 bg-slate-950 rounded-full border border-slate-800 flex items-center justify-center text-4xl mb-3 group-hover:scale-105 transition-transform">
-                        ${opt.avatar}
-                    </div>
-                    <p class="text-slate-400 font-medium text-xs leading-relaxed mb-4 min-h-[48px] flex items-center justify-center">${opt.text}</p>
-                    <button class="bg-slate-800 group-hover:bg-emerald-600 group-hover:text-white text-slate-400 font-bold text-[10px] py-1.5 px-3 rounded-lg transition-all w-full border border-slate-700 group-hover:border-emerald-500">
-                        단서로 제출
-                    </button>
-                `;
-                card.onclick = () => {
-                    verifyChoiceAnswer(idx, quiz.correctIndex);
-                };
-                grid.appendChild(card);
-            });
-
-            wrapper.appendChild(grid);
-            container.appendChild(wrapper);
-        }
-
-        function verifyChoiceAnswer(selectedIdx, correctIdx) {
-            if (selectedIdx === correctIdx) {
-                handleQuestionSuccess();
-            } else {
-                handleQuestionFailure();
-            }
-        }
-
-        // WALKIE-TALKIE HINT REVEAL
-        function revealTeacherHint() {
+        function closeHintModal() {
             playClickSound();
-            const quiz = shuffledQuestions[currentActiveIndex];
-            const bubble = document.getElementById('teacher-bubble');
-            
-            bubble.innerHTML = `
-                <span class="text-amber-400 font-bold block mb-1">📢 Rebecca 선생님의 무전 힌트!</span>
-                ${quiz.hint}
-            `;
-            
-            bubble.parentElement.classList.add('ring-2', 'ring-amber-500/30');
-            setTimeout(() => {
-                bubble.parentElement.classList.remove('ring-2', 'ring-amber-500/30');
-            }, 800);
+            document.getElementById('hint-modal').classList.add('hidden');
         }
 
-        // LIVES / HEART METER
-        function renderLives() {
-            const container = document.getElementById('hearts-container');
-            container.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                if (i < currentLives) {
-                    container.innerHTML += `<i class="fa-solid fa-heart text-rose-500 text-lg transition-all duration-300 transform hover:scale-110"></i>`;
-                } else {
-                    container.innerHTML += `<i class="fa-regular fa-heart text-slate-700 text-lg transition-all"></i>`;
-                }
+        // ESCAPE DOOR KEYPAD SYSTEM
+        function renderKeypad() {
+            const keypadContainer = document.getElementById('escape-pin-keypad');
+            keypadContainer.innerHTML = "";
+
+            // Shuffle standard pool + must contain the secret codes to avoid keypad unavailability
+            const charsInMaster = generatedMasterCode.split('');
+            const candidates = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".split('');
+            
+            // Collect unique letters until 12
+            let poolSet = new Set(charsInMaster);
+            while(poolSet.size < 12) {
+                const rand = candidates[Math.floor(Math.random() * candidates.length)];
+                poolSet.add(rand);
             }
-        }
 
-        // BANNER FEEDBACK MESSAGES
-        function showFeedbackBanner(message, isSuccess = true) {
-            const banner = document.getElementById('feedback-banner');
-            const text = document.getElementById('feedback-text');
-            text.innerText = message;
-            
-            banner.classList.remove('hidden', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20', 'bg-rose-500/10', 'text-rose-400', 'border-rose-500/20');
-            
-            if (isSuccess) {
-                banner.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
-            } else {
-                banner.classList.add('bg-rose-500/10', 'text-rose-400', 'border-rose-500/20');
-            }
-            
-            banner.classList.add('animate-bounce');
-            setTimeout(() => {
-                banner.classList.remove('animate-bounce');
-            }, 700);
-        }
+            const shuffledKeypadChars = Array.from(poolSet).sort(() => Math.random() - 0.5);
 
-        function hideFeedbackBanner() {
-            document.getElementById('feedback-banner').classList.add('hidden');
-        }
-
-        // ON QUESTION SUCCESS
-        function handleQuestionSuccess() {
-            playSuccessSound();
-            showFeedbackBanner("🎉 대단해! 정확한 암호 단서야! 👍", true);
-
-            // Update walkie talkie speech with quick phrase compliments
-            const bubble = document.getElementById('teacher-bubble');
-            const rewards = [
-                "치이익- 와우! 완벽하게 단서를 정렬해내다니 대단해!",
-                "정답이야! 점차 마법의 비상구 봉인이 약해지고 있어!",
-                "최고란다! 다음 단서도 영어 실력을 모아 극복해 보렴!"
-            ];
-            bubble.innerText = rewards[Math.floor(Math.random() * rewards.length)];
-
-            // Evaluate Password Portion Unlocks
-            // Since there are 24 questions, every 4 correct solves unlocks 1 digit (24 / 6 = 4)
-            const groupsSolved = Math.floor((currentActiveIndex + 1) / 4);
-            for (let i = 0; i < groupsSolved; i++) {
-                if (unlockedCodeSlots[i] === "-") {
-                    unlockedCodeSlots[i] = generatedMasterCode.charAt(i);
-                    setTimeout(() => {
-                        playCodeRevealSound();
-                        showFeedbackBanner(`🔑 탈출 패스워드 ${i+1}번째 문자 [ ${unlockedCodeSlots[i]} ] 안전 복원!`, true);
-                    }, 400);
-                }
-            }
-            updateClueBookUI();
-
-            // Next question delay
-            setTimeout(() => {
-                if (currentActiveIndex + 1 < shuffledQuestions.length) {
-                    currentActiveIndex++;
-                    loadActiveQuestion();
-                } else {
-                    // ALL 24 PROBLEMS CLEAR - Go to keypad terminal
-                    stopTimer();
-                    goToMasterKeypadRoom();
-                }
-            }, 1300);
-        }
-
-        // ON QUESTION FAILURE
-        function handleQuestionFailure() {
-            playFailSound();
-            currentLives--;
-            showFeedbackBanner("😢 잘못된 해독 방향이야. 단어와 철자를 다시 검토해 봐!", false);
-            renderLives();
-
-            const bubble = document.getElementById('teacher-bubble');
-            bubble.innerHTML = `<span class="text-rose-400 font-bold block">🚨 주파수 이탈 감지!</span> 무전기 아래의 '무전 힌트 요청' 버튼을 누르면 정답 해결 단서를 전송해 줄게!`;
-
-            if (currentLives <= 0) {
-                setTimeout(() => {
-                    showFeedbackBanner("⚠️ 보안 에너지가 방전되어 시스템이 리셋되었습니다! 처음부터 재시도합니다.", false);
-                    setTimeout(() => {
-                        startGame(); // Reboot same room state
-                    }, 1200);
-                }, 800);
-            }
-        }
-
-        // MASTER KEYPAD SCREEN ENTRY
-        function goToMasterKeypadRoom() {
-            playLevelUpSound();
-            transitionScreen('step-challenge', 'step-keypad-panel');
-
-            // Set clue reminder at keypad footer
-            const displayedCodePattern = unlockedCodeSlots.join(" - ");
-            document.getElementById('keypad-clue-reminder').innerText = displayedCodePattern;
-
-            // Generate Keypad Button Grid dynamically
-            const gridContainer = document.getElementById('keypad-buttons-grid');
-            gridContainer.innerHTML = '';
-
-            // Generate a set of unique characters containing all letters of the code and additional decoy characters
-            const requiredKeysSet = new Set(generatedMasterCode.split(''));
-            
-            // Add some standard supplementary digits and characters
-            const fillers = ["1", "3", "5", "7", "9", "A", "E", "S", "X", "Z", "M", "P"];
-            fillers.forEach(f => {
-                if (requiredKeysSet.size < 12) {
-                    requiredKeysSet.add(f);
-                }
+            shuffledKeypadChars.forEach(char => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-950 hover:bg-slate-800 active:bg-blue-950 border border-slate-850 hover:border-blue-500/40 py-3 rounded-lg text-sm font-digital text-slate-300 font-extrabold transition";
+                btn.onclick = () => pressKeypad(char);
+                btn.innerText = char;
+                keypadContainer.appendChild(btn);
             });
-
-            // Convert set to array and shuffle
-            const finalKeys = Array.from(requiredKeysSet);
-            shuffleArray(finalKeys);
-
-            // Render keys
-            finalKeys.forEach((key) => {
-                const button = document.createElement('button');
-                button.className = "bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 rounded-xl border border-slate-700/80 text-lg transition-transform transform active:scale-90 hover:border-emerald-500/50 shadow-md font-mono";
-                button.innerText = key;
-                button.onclick = () => {
-                    playClickSound();
-                    typeKeypadChar(key);
-                };
-                gridContainer.appendChild(button);
-            });
-
-            userEnteredCode = "";
-            renderKeypadDisplay();
         }
 
-        // Manage key input
-        function typeKeypadChar(char) {
+        function pressKeypad(char) {
+            playClickSound();
             if (userEnteredCode.length < 6) {
                 userEnteredCode += char;
-                renderKeypadDisplay();
+                updatePinDisplay();
             }
         }
 
-        function clearKeypadDisplay() {
+        function clearEnteredPin() {
             playClickSound();
             userEnteredCode = "";
-            renderKeypadDisplay();
+            updatePinDisplay();
         }
 
-        function renderKeypadDisplay() {
-            const display = document.getElementById('keypad-display');
-            let output = "";
-            for (let i = 0; i < 6; i++) {
-                if (i < userEnteredCode.length) {
-                    output += userEnteredCode.charAt(i) + " ";
-                } else {
-                    output += "_ ";
-                }
-            }
-            display.innerText = output.trim();
+        function updatePinDisplay() {
+            const padded = userEnteredCode.padEnd(6, '-');
+            document.getElementById('entered-pin-display').innerText = padded;
         }
 
-        // VERIFY ESCAPE ATTEMPT
-        function submitKeypadCode() {
+        // VERIFY FINAL KEYPAD ESCAPE
+        async function submitEscapePin() {
             if (userEnteredCode.length < 6) {
                 playFailSound();
-                showKeypadFeedback("암호 자릿수가 부족합니다!", false);
+                alert("6자리 암호를 모두 채워 넣어야 합니다!");
                 return;
             }
 
             if (userEnteredCode === generatedMasterCode) {
-                // VICTORY ESCAPE!
+                // VICTORY ESCAPE SUCCESS
+                clearInterval(timerInterval);
                 playLevelUpSound();
-                showCertificate();
+
+                // Generate certificate values
+                document.getElementById('cert-user-info').innerText = `6학년 ${studentClass}반 ${studentNumber}번 ${studentName}`;
+                document.getElementById('cert-channel-id').innerText = document.getElementById('user-channel-id').innerText;
+                
+                const finalMins = Math.floor(totalSecondsElapsed / 60);
+                const finalSecs = totalSecondsElapsed % 60;
+                document.getElementById('cert-time-record').innerText = `${finalMins}분 ${finalSecs}초`;
+
+                // Switch screen
+                document.getElementById('screen-game').classList.add('hidden');
+                document.getElementById('screen-success').classList.remove('hidden');
+
+                // Save to Firestore leaderboard securely (Rule 1 & Rule 3)
+                await saveRecordToFirestore();
+
             } else {
                 playFailSound();
-                showKeypadFeedback("삐- 틀린 비밀번호입니다!", false);
+                alert("삐빅! 보안 암호 키가 일치하지 않습니다! 해독 수첩을 참고하세요.");
                 userEnteredCode = "";
-                renderKeypadDisplay();
+                updatePinDisplay();
             }
         }
 
-        function showKeypadFeedback(msg, isSuccess) {
-            const display = document.getElementById('keypad-display');
-            display.innerText = msg;
-            display.className = `text-lg font-black tracking-normal transition-all ${isSuccess ? 'text-emerald-400' : 'text-rose-400'}`;
-            
-            setTimeout(() => {
-                display.className = "text-3xl font-mono font-black text-emerald-400 tracking-widest min-h-[40px] flex items-center justify-center";
-                renderKeypadDisplay();
-            }, 1200);
+        // SAVE RECORD TO FIRESTORE CLOUD SECURELY
+        async function saveRecordToFirestore() {
+            if (!db || !auth || !auth.currentUser) {
+                console.warn("Cloud connection offline. Record not saved online.");
+                return;
+            }
+            try {
+                // Rule 1: Strictly structured public data path
+                const collectionRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+                
+                const studentDocId = `${studentClass}_${studentNumber}_${auth.currentUser.uid.substring(0, 8)}`;
+                
+                await collectionRef.doc(studentDocId).set({
+                    studentClass: studentClass,
+                    studentNumber: parseInt(studentNumber),
+                    studentName: studentName,
+                    seconds: totalSecondsElapsed,
+                    completedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                console.log("Escape record synchronized securely with Cloud Firestore.");
+            } catch (err) {
+                console.error("Failed to commit score to Firestore:", err);
+            }
         }
 
-        // SHOWING OFFICIAL MASTER CERTIFICATE
-        function showCertificate() {
-            stopTimer();
-            playLevelUpSound();
-            
-            // Populate student class, number, name elegantly
-            document.getElementById('cert-student-name').innerText = `6학년 ${studentClass}반 ${studentNumber}번 ${studentName}`;
-            
-            // Format current date beautifully in Korean
-            const dateObj = new Date();
-            const yearStr = dateObj.getFullYear();
-            const monthStr = dateObj.getMonth() + 1;
-            const dateStr = dateObj.getDate();
-            document.getElementById('current-date-cert').innerText = `${yearStr}년 ${monthStr}월 ${dateStr}일`;
+        // REALTIME SUBSCRIPTION FOR THE LEADERBOARD SYSTEM (RULE 2 - Frontend filtering)
+        function listenToLeaderboard() {
+            if (!db) return;
+            try {
+                // Querying the standardized public path
+                const queryRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+                
+                // Rule 2: Fetch raw documents and filter/sort in JavaScript to avoid composite index problems
+                queryRef.onSnapshot((snapshot) => {
+                    leaderboardData = [];
+                    snapshot.forEach(doc => {
+                        leaderboardData.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    renderLeaderboardUI();
+                }, (error) => {
+                    console.error("Leaderboard subscription failed:", error);
+                });
+            } catch (err) {
+                console.error("Firestore listening layout failed:", err);
+            }
+        }
 
-            // Display elapsed time
-            const minutes = Math.floor(totalSecondsElapsed / 60);
-            const seconds = totalSecondsElapsed % 60;
-            document.getElementById('final-escape-record').innerText = `최종 탈출 소요 시간: ${minutes}분 ${seconds}초`;
+        // FILTER & SORT LOGIC EXCLUSIVELY VIA JAVASCRIPT MEMORY (RULE 2 COMPLIANCE)
+        function renderLeaderboardUI() {
+            const listContainer = document.getElementById('leaderboard-ranking-list');
+            if (!listContainer) return;
 
-            // Save record automatically into the database so the teacher can monitor it (RULE 1)
-            if (typeof window.saveRecordToCloud === 'function') {
-                window.saveRecordToCloud(studentClass, studentNumber, studentName, totalSecondsElapsed);
+            if (leaderboardData.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-12 text-xs text-slate-500">
+                        <i class="fa-solid fa-ghost text-lg mb-2 block"></i>
+                        아직 탈출한 학생이 없습니다. 첫 번째 영광의 주인공이 되어보세요!
+                    </div>
+                `;
+                return;
             }
 
-            // Display Certificate screen
-            transitionScreen('step-keypad-panel', 'step-certificate');
-            triggerConfettiContinuous();
+            // Step 1: Filter by Class
+            let filtered = [...leaderboardData];
+            if (currentClassFilter !== 'all') {
+                filtered = filtered.filter(item => item.studentClass === currentClassFilter);
+            }
+
+            // Step 2: Sort exclusively in memory (Rule 2)
+            if (currentSortOrder === 'time') {
+                // Speedrun: ascending order of total seconds
+                filtered.sort((a, b) => {
+                    if (a.seconds !== b.seconds) {
+                        return a.seconds - b.seconds;
+                    }
+                    // if equal, latest completed first
+                    return (b.completedAt?.seconds || 0) - (a.completedAt?.seconds || 0);
+                });
+            } else {
+                // Latest complete: descending order of timestamp
+                filtered.sort((a, b) => {
+                    const timeA = a.completedAt?.seconds || 0;
+                    const timeB = b.completedAt?.seconds || 0;
+                    return timeB - timeA;
+                });
+            }
+
+            // Step 3: Render HTML UI
+            listContainer.innerHTML = "";
+            filtered.forEach((item, index) => {
+                const mins = Math.floor(item.seconds / 60);
+                const secs = item.seconds % 60;
+                const activeUserHighlight = (studentName === item.studentName && studentClass === item.studentClass && parseInt(studentNumber) === item.studentNumber);
+
+                const itemRow = document.createElement('div');
+                itemRow.className = `p-3 rounded-xl border flex items-center justify-between text-xs transition ${
+                    activeUserHighlight 
+                    ? 'bg-blue-950/50 border-blue-500 text-blue-200' 
+                    : 'bg-slate-950/60 border-slate-850 hover:bg-slate-900'
+                }`;
+
+                // Crown icons for top 3
+                let rankBadge = `<span class="font-digital text-slate-500 w-5 text-center">${index + 1}</span>`;
+                if (currentSortOrder === 'time') {
+                    if (index === 0) rankBadge = `<span class="text-amber-400 w-5 text-center">👑</span>`;
+                    else if (index === 1) rankBadge = `<span class="text-slate-300 w-5 text-center">🥈</span>`;
+                    else if (index === 2) rankBadge = `<span class="text-amber-600 w-5 text-center">🥉</span>`;
+                }
+
+                itemRow.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        ${rankBadge}
+                        <div>
+                            <span class="font-game text-slate-200">${item.studentClass}반 ${item.studentNumber}번 ${item.studentName}</span>
+                            ${activeUserHighlight ? '<span class="text-[9px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1 py-0.5 rounded ml-1">나</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 font-digital font-bold text-emerald-400">
+                        <i class="fa-solid fa-clock-rotate-left text-[10px]"></i>
+                        <span>${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}</span>
+                    </div>
+                `;
+                listContainer.appendChild(itemRow);
+            });
         }
 
-        // Leaderboard modal state helpers
-        function openLeaderboard() {
+        // SWITCH LEADERBOARD VIEW CONTROLS
+        function changeSortOrder(order) {
             playClickSound();
-            const modal = document.getElementById('leaderboard-modal');
-            modal.classList.remove('hidden');
+            currentSortOrder = order;
+            
+            // Visual toggle style
+            const timeBtn = document.getElementById('sort-btn-time');
+            const latestBtn = document.getElementById('sort-btn-latest');
+
+            if (order === 'time') {
+                timeBtn.className = "flex-1 py-1.5 rounded bg-blue-950 text-blue-300 font-game border border-blue-900";
+                latestBtn.className = "flex-1 py-1.5 rounded bg-slate-950 text-slate-400 font-game border border-slate-800";
+            } else {
+                timeBtn.className = "flex-1 py-1.5 rounded bg-slate-950 text-slate-400 font-game border border-slate-800";
+                latestBtn.className = "flex-1 py-1.5 rounded bg-blue-950 text-blue-300 font-game border border-blue-900";
+            }
             renderLeaderboardUI();
         }
 
-        // Close Modal handler
+        function filterClass(cls) {
+            playClickSound();
+            currentClassFilter = cls;
+            
+            // Visual active tabs toggle
+            document.querySelectorAll('.class-filter-tab').forEach(tab => {
+                tab.className = "class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400";
+            });
+            const activeTab = document.getElementById(`class-filter-${cls}`);
+            if (activeTab) {
+                activeTab.className = "class-filter-tab px-3 py-1 rounded bg-blue-500 text-slate-950 font-bold";
+            }
+            renderLeaderboardUI();
+        }
+
+        // OPEN / CLOSE LEADERBOARD SCREEN MODALS
+        function openLeaderboard() {
+            playClickSound();
+            document.getElementById('leaderboard-modal').classList.remove('hidden');
+            renderLeaderboardUI();
+        }
+
         function closeLeaderboard() {
             playClickSound();
-            const modal = document.getElementById('leaderboard-modal');
-            modal.classList.add('hidden');
+            document.getElementById('leaderboard-modal').classList.add('hidden');
         }
 
-        // Restart entire game to register screen
-        function restartEntireGame() {
-            playClickSound();
-            stopTimer();
-            stopConfetti();
-
-            // Reset states
-            shuffledQuestions = [];
-            currentActiveIndex = 0;
-            unlockedCodeSlots = ["-", "-", "-", "-", "-", "-"];
-            userEnteredCode = "";
-
-            transitionScreen('step-certificate', 'step-register');
-            document.getElementById('game-timer-badge').classList.add('hidden');
-        }
-
-        // CONFETTI CANVAS IMPLEMENTATIONS
-        const canvas = document.getElementById("confetti-canvas");
-        const ctx = canvas.getContext("2d");
-        let confettiActive = false;
-        let confettiPieces = [];
-        const colors = ["#10b981", "#3b82f6", "#eab308", "#f43f5e", "#a855f7", "#06b6d4"];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener("resize", resizeCanvas);
-
-        function createConfettiPiece() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * -canvas.height - 20,
-                r: Math.random() * 5 + 4,
-                d: Math.random() * canvas.height,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                tilt: Math.random() * 10 - 5,
-                tiltAngleIncremental: Math.random() * 0.06 + 0.02,
-                tiltAngle: 0
-            };
-        }
-
-        function triggerConfettiContinuous() {
-            resizeCanvas();
-            canvas.classList.remove('hidden');
-            confettiPieces = [];
-            for (let i = 0; i < 110; i++) {
-                confettiPieces.push(createConfettiPiece());
-            }
-            if (!confettiActive) {
-                confettiActive = true;
-                drawConfetti();
-            }
-        }
-
-        function stopConfetti() {
-            confettiActive = false;
-            canvas.classList.add('hidden');
-            confettiPieces = [];
-        }
-
-        function drawConfetti() {
-            if (!confettiActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let activePieces = false;
-
-            confettiPieces.forEach((p, idx) => {
-                p.tiltAngle += p.tiltAngleIncremental;
-                p.y += (Math.cos(p.tiltAngle) + 3 + p.r / 2) / 2;
-                p.x += Math.sin(p.tiltAngle);
-
-                p.tilt = Math.sin(p.tiltAngle - idx / 3) * 12;
-
-                ctx.beginPath();
-                ctx.lineWidth = p.r;
-                ctx.strokeStyle = p.color;
-                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
-                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
-                ctx.stroke();
-
-                if (p.y < canvas.height && p.x > 0 && p.x < canvas.width) {
-                    activePieces = true;
-                } else {
-                    confettiPieces[idx] = createConfettiPiece();
-                    activePieces = true;
+        // APPLICATION WINDOW ONLOAD ENTRY
+        window.onload = function() {
+            // Populate numbers selection dropdown (1 to 25)
+            const numSelect = document.getElementById('input-number');
+            if (numSelect) {
+                numSelect.innerHTML = '<option value="">번호 선택</option>';
+                for (let i = 1; i <= 25; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.innerText = `${i}번`;
+                    numSelect.appendChild(opt);
                 }
-            });
-
-            if (activePieces) {
-                requestAnimationFrame(drawConfetti);
-            } else {
-                canvas.classList.add('hidden');
-                confettiActive = false;
             }
-        }
+
+            // Restore from localStorage
+            if (localStorage.getItem('6th_escape_class')) {
+                const classSelect = document.getElementById('input-class');
+                if (classSelect) classSelect.value = localStorage.getItem('6th_escape_class');
+            }
+            if (localStorage.getItem('6th_escape_number')) {
+                if (numSelect) numSelect.value = localStorage.getItem('6th_escape_number');
+            }
+            if (localStorage.getItem('6th_escape_name_real')) {
+                const nameInput = document.getElementById('input-name');
+                if (nameInput) nameInput.value = localStorage.getItem('6th_escape_name_real');
+            }
+
+            // Initialize connection with Firestore
+            initFirebaseAndAuth();
+        };
     </script>
 </body>
 </html>
