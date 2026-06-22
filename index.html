@@ -70,9 +70,20 @@
                 display: none !important;
             }
         }
+        /* Shake effect for wrong subjective answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-emerald-500 selection:text-slate-900">
+
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- Top Glow Header -->
     <header class="bg-slate-950/80 backdrop-blur-md border-b border-slate-900 sticky top-0 z-40 px-4 py-3">
@@ -211,9 +222,9 @@
                         </h3>
                     </div>
 
-                    <!-- Options Area -->
+                    <!-- Options / Subjective Input Area -->
                     <div id="question-options-container" class="space-y-3">
-                        <!-- Dynamic generated buttons for single choice -->
+                        <!-- Dynamic generated buttons or input box for subjective question -->
                     </div>
 
                     <!-- Lock Action State / Verification Alert -->
@@ -404,19 +415,12 @@
             </div>
 
             <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500">
-                <span>* Firebase Firestore 실시간 동기화 적용</span>
+                <span>* 로컬 스토리지 & Firebase 실시간 동기화 적용</span>
                 <button onclick="closeLeaderboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-1.5 rounded font-game">닫기</button>
             </div>
         </div>
     </div>
 
-    <!-- Playful Educational Footer -->
-    <footer class="bg-slate-950 border-t border-slate-900 py-4 px-4 text-center text-[10px] text-slate-500">
-        <p class="font-bold text-slate-400 mb-1">👩‍🏫 6학년 천재교과서 (김태은) 방탈출 융합복습 미션 🔑</p>
-        <p>Copyright © 2026. Designed with ❤️ for elementary school English education.</p>
-    </footer>
-
-    <!-- FIREBASE SERVICES CORE IMPORTS -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -443,6 +447,37 @@
         // SOUND SYSTEM IMPLEMENTATION USING WEB AUDIO API
         let audioCtx = null;
         let soundMuted = false;
+
+        // CUSTOM TOAST NOTIFICATION SYSTEM (Replaces alert() completely)
+        function showNotification(message, type = 'error') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl shadow-lg border text-xs font-bold transition-all duration-300 transform translate-y-2 opacity-0 flex items-center space-x-2 pointer-events-auto max-w-xs ${
+                type === 'success' 
+                ? 'bg-emerald-950 border-emerald-500 text-emerald-400' 
+                : 'bg-rose-950 border-rose-500 text-rose-300'
+            }`;
+            
+            const icon = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-triangle-exclamation';
+            toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Animate Out & Remove
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
 
         function toggleSound() {
             soundMuted = !soundMuted;
@@ -505,22 +540,21 @@
             setTimeout(() => playSound(1046.50, 'sine', 0.35), 300);
         }
 
-        // COMPLETE 24 QUESTIONS COMPRISING 1-6 UNITS (4 questions per unit)
-        // Strictly conceptual comprehension and situational dialog - NO structural/syntactical description questions
         const EXAM_POOL = [
             // UNIT 1: What Grade Are You In? (학년 묻기)
             {
                 unit: "Lesson 1",
-                situation: "미국에서 온 전학생 민우가 학년을 물어보는 상황입니다. 알맞은 단어를 선택하세요.",
-                question: "Minwoo: What grade are you in?\nSujin: I'm in the _______ grade.",
-                options: ["sixth", "six", "sixteen", "first"],
+                situation: "미국에서 온 전학생 민우가 학년을 물어보는 상황입니다. 빈칸에 알맞은 서수 단어를 영어 주관식으로 작성하세요.",
+                question: "Minwoo: What grade are you in?\nSujin: I'm in the _______ grade. (6학년)",
+                type: "subjective",
                 answer: "sixth",
-                hint: "학년을 표현할 때는 기수(one, two)가 아닌 순서를 나타내는 서수(first, second, third... sixth)를 사용해야 해! 6학년은 sixth grade란다."
+                hint: "6번째를 의미하는 서수는 'six' 뒤에 'th'를 붙인 형태인 'sixth'란다."
             },
             {
                 unit: "Lesson 1",
                 situation: "새 학기 첫날, 길에서 주원이가 처음 만난 학생의 학년이 궁금해서 질문을 하려고 합니다. 알맞은 문장은 무엇일까요?",
                 question: "주원: _________________________________",
+                type: "multiple",
                 options: [
                     "What grade are you in?",
                     "What's your favorite subject?",
@@ -534,6 +568,7 @@
                 unit: "Lesson 1",
                 situation: "대화를 읽고, 그림 속에 등장하는 대희(Daehee)의 실제 학년을 찾으세요.",
                 question: "A: What grade is Daehee in?\nB: He is in the fifth grade.",
+                type: "multiple",
                 options: ["5학년", "6학년", "4학년", "3학년"],
                 answer: "5학년",
                 hint: "fifth는 숫자 5를 순서로 나타내는 서수 표현이야. 따라서 대희는 5학년이라는 의미지!"
@@ -542,6 +577,7 @@
                 unit: "Lesson 1",
                 situation: "외국인 친구가 'Are you in the sixth grade?'라고 물었을 때, 여러분의 상황에 맞는 알맞은 답변을 고르세요.",
                 question: "Friend: Are you in the sixth grade?\nYou: ___________________________",
+                type: "multiple",
                 options: [
                     "Yes, I am. I'm in the sixth grade.",
                     "No, I am in the fifth grade.",
@@ -555,9 +591,9 @@
             // UNIT 2: I Have a Cold. (아픈 증상과 제안)
             {
                 unit: "Lesson 2",
-                situation: "지훈이가 머리를 감싸 쥐고 괴로워하고 있습니다. 지훈이의 상태에 맞는 알맞은 답변은?",
-                question: "Teacher: What's the matter?\nJihoon: I have a _______.",
-                options: ["headache", "toothache", "runny nose", "sore throat"],
+                situation: "지훈이가 머리를 감싸 쥐고 괴로워하고 있습니다. 지훈이의 상태에 맞는 알맞은 단어를 영어 주관식으로 작성하세요.",
+                question: "Teacher: What's the matter?\nJihoon: I have a _______ . (두통)",
+                type: "subjective",
                 answer: "headache",
                 hint: "머리가 아픈 아픔을 나타내는 단어는 head(머리)와 ache(통증)가 합쳐진 'headache'(두통) 란다."
             },
@@ -565,6 +601,7 @@
                 unit: "Lesson 2",
                 situation: "목이 심하게 붓고 아픈 지우에게 Rebecca 선생님이 줄 수 있는 조언으로 가장 적절한 대화를 완성해 보세요.",
                 question: "Jiwoo: I have a sore throat.\nRebecca: ________________________",
+                type: "multiple",
                 options: [
                     "Drink warm water and get some rest.",
                     "Go out and play soccer with friends.",
@@ -577,8 +614,8 @@
             {
                 unit: "Lesson 2",
                 situation: "치과 복도에서 은우와 의사 선생님의 대화입니다. 은우의 증상에 걸맞은 문장을 완성하세요.",
-                question: "Doctor: What's wrong, Eunwoo?\nEunwoo: I can't eat food. I have a severe _______.",
-                options: ["toothache", "stomachache", "headache", "cold"],
+                question: "Doctor: What's wrong, Eunwoo?\nEunwoo: I can't eat food. I have a severe _______ . (치통)",
+                type: "subjective",
                 answer: "toothache",
                 hint: "음식을 씹을 수 없고 이가 너무 아픈 증상은 tooth(치아)와 ache가 만난 'toothache'(치통)야."
             },
@@ -586,6 +623,7 @@
                 unit: "Lesson 2",
                 situation: "지독한 독감에 걸려서 열이 펄펄 끓고 있는 친구에게 제안할 말로 가장 알맞은 단어는?",
                 question: "Take some _______ and go to bed early.",
+                type: "multiple",
                 options: ["medicine", "homework", "sugar", "candy"],
                 answer: "medicine",
                 hint: "몸이 많이 아플 때는 처방된 약을 복용하는 것이 좋겠지? '약을 먹다'는 표현은 'Take some medicine'이라고 해."
@@ -594,16 +632,17 @@
             // UNIT 3: When Is the School Market? (행사 날짜 묻기)
             {
                 unit: "Lesson 3",
-                situation: "가을에 열리는 학교 장터 날짜를 묻고 대답하는 장면입니다. 빈칸에 들어갈 알맞은 월 이름은?",
-                question: "A: When is the school market?\nB: It's on _______ 15th. It's in Autumn.",
-                options: ["October", "March", "January", "April"],
+                situation: "가을에 열리는 학교 장터 날짜를 묻고 대답하는 장면입니다. 빈칸에 들어갈 알맞은 월 이름을 주관식 영어 단어로 적으세요. (첫 글자는 대문자로 시작하세요)",
+                question: "A: When is the school market?\nB: It's on _______ 15th. (10월)",
+                type: "subjective",
                 answer: "October",
-                hint: "가을에 열리는 달을 선택해야 해! October는 선선한 가을인 10월을 의미한단다."
+                hint: "가을에 열리는 10월은 영어로 'October'라고 표기한단다. 첫 글자 O를 대문자로 쓰는 것도 잊지 마!"
             },
             {
                 unit: "Lesson 3",
                 situation: "생일 파티 날짜가 5월 12일이라고 말하고자 합니다. 날짜를 서수 형태로 완벽히 올바르게 표현한 것은 무엇일까요?",
                 question: "A: When is your birthday?\nB: It's on _______.",
+                type: "multiple",
                 options: ["May twelfth", "May twelve", "March twelve", "May second"],
                 answer: "May twelfth",
                 hint: "12일은 그냥 twelve가 아니라 서수인 'twelfth'로 표현해야 완벽해. 월 이름은 5월인 May란다."
@@ -612,6 +651,7 @@
                 unit: "Lesson 3",
                 situation: "체육대회(Sports Day)가 10월 3일에 열립니다. 3일에 매칭될 알맞은 서수 표기형은?",
                 question: "Sports Day is on October _______.",
+                type: "multiple",
                 options: ["3rd", "3st", "3nd", "3th"],
                 answer: "3rd",
                 hint: "날짜의 1일은 1st, 2일은 2nd, 3일은 3rd로 약칭을 적어. 3일은 third이므로 '3rd'가 정답이야!"
@@ -620,6 +660,7 @@
                 unit: "Lesson 3",
                 situation: "달력을 보니 이번 크리스마스 행사가 12월 25일에 예정되어 있습니다. 날짜 표현으로 가장 올바른 대화를 찾으세요.",
                 question: "When is the Christmas concert?\nIt's on _______.",
+                type: "multiple",
                 options: [
                     "December twenty-fifth",
                     "December twenty-five",
@@ -635,6 +676,7 @@
                 unit: "Lesson 4",
                 situation: "경찰관이 몽타주를 그리며 목격자에게 용의자의 안경 착용 여부를 물어보고 있습니다. 알맞은 대답은?",
                 question: "Officer: What does he look like?\nWitness: He has brown eyes and __________________.",
+                type: "multiple",
                 options: [
                     "he is wearing glasses",
                     "he likes playing games",
@@ -647,7 +689,7 @@
             {
                 unit: "Lesson 4",
                 situation: "소개해 줄 여동생의 머리 스타일을 설명하는 모습입니다. 'She has long straight hair.'를 한국어로 바르게 옮겨놓은 것은?",
-                question: "Emma: What does your sister look like?\nMinho: She has long straight hair.",
+                type: "multiple",
                 options: [
                     "그녀는 긴 생머리를 가지고 있어.",
                     "그녀는 짧은 파마머리를 가지고 있어.",
@@ -661,6 +703,7 @@
                 unit: "Lesson 4",
                 situation: "다음 영어 설명을 읽고 일치하는 인물의 모습을 보기에서 고르세요.",
                 question: "Description: She is tall and has short curly hair.",
+                type: "multiple",
                 options: [
                     "키가 크고 짧은 곱슬머리를 한 사람",
                     "키가 작고 긴 곱슬머리를 한 사람",
@@ -672,26 +715,27 @@
             },
             {
                 unit: "Lesson 4",
-                situation: "새 짝꿍의 인상착의를 묻고 답하는 상황입니다. 파란색 눈을 가진 소년을 표현하기 위해 빈칸에 들어갈 전형적인 영어 표현은?",
+                situation: "새 짝꿍의 인상착의를 묻고 답하는 상황입니다. 주어 'He'에 맞춰 '가지고 있다'에 해당하는 알맞은 단어를 영어 주관식으로 적으세요.",
                 question: "A: What does he look like?\nB: He is tall and he _______ blue eyes.",
-                options: ["has", "is", "wear", "looks"],
+                type: "subjective",
                 answer: "has",
-                hint: "신체 부위나 눈동자 색, 머리 모양을 가지고 있을 때는 'have' 또는 주어가 He나 She일 때는 'has'를 동사로 쓴단다."
+                hint: "신체 부위나 눈동자 색, 머리 모양을 가지고 있을 때는 'have'를 쓰지만, 주어가 He나 She일 때는 'has'를 쓴단다."
             },
 
             // UNIT 5: What Are You Going to Do on Saturday? (미래 계획)
             {
                 unit: "Lesson 5",
-                situation: "주말 계획을 궁금해하는 유나에게, 이번 주말에 할머니 댁을 방문할 예정이라고 말하고 싶습니다. 알맞은 단어 조합은?",
+                situation: "주말 계획을 궁금해하는 유나에게, 이번 주말에 할머니 댁을 방문할 예정이라고 말하고 싶습니다. '방문하다'의 의미를 가진 영어 단어를 주관식으로 작성하세요.",
                 question: "Yuna: What are you going to do this Saturday?\nDongsu: I'm going to _______ my grandparents.",
-                options: ["visit", "visiting", "visited", "visits"],
+                type: "subjective",
                 answer: "visit",
-                hint: "~할 계획이다라는 'going to' 뒤에는 가고자 하는 행동을 뜻하는 기본 행동 단어(동사원형)인 'visit'가 와야 어울려!"
+                hint: "방문하다의 뜻을 가진 기본 동사는 'visit'란다."
             },
             {
                 unit: "Lesson 5",
                 situation: "오후에 재미있는 영화를 볼 것이라는 미래 계획을 세웠습니다. 알맞은 문장을 완성해 보세요.",
                 question: "What are you going to do this afternoon?\nI'm ___________________________.",
+                type: "multiple",
                 options: [
                     "going to watch a movie",
                     "watching a movie",
@@ -699,12 +743,13 @@
                     "like to watch a movie"
                 ],
                 answer: "going to watch a movie",
-                hint: "~할 예정이다라는 미래 계획을 질문받았으므로 'I'm going to' 뒤에 동작 'watch a movie'를 붙여 답변하면 완벽하지."
+                hint: "going to' 뒤에 동작 'watch a movie'를 붙여 미래에 할 행동을 완성할 수 있단다."
             },
             {
                 unit: "Lesson 5",
                 situation: "이번 주 일요일에 박물관으로 견학 여행을 갈 계획인 진수가 할 대답을 고르세요.",
                 question: "A: What are you going to do on Sunday?\nJinsoo: I'm going to go to the _______.",
+                type: "multiple",
                 options: ["museum", "market", "concert", "hospital"],
                 answer: "museum",
                 hint: "박물관을 영어로 지칭하는 대표적인 어휘는 바로 'museum'이란다."
@@ -713,6 +758,7 @@
                 unit: "Lesson 5",
                 situation: "친구들이 방학 계획을 서로 이야기하고 있습니다. 'I'm going to join a space camp.'라는 말이 나타내는 뜻은?",
                 question: "Jiwoo: I'm going to join a space camp.",
+                type: "multiple",
                 options: [
                     "나는 우주 캠프에 참여할 예정이야.",
                     "나는 수영 캠프에 참가하고 싶어.",
@@ -728,6 +774,7 @@
                 unit: "Lesson 6",
                 situation: "가게에서 두 개의 가방 중 어느 것이 더 저렴한지 물어보고 싶습니다. 알맞은 질문을 골라주세요.",
                 question: "Yuna: ___________________________\nClerk: The blue bag is cheaper than the red one.",
+                type: "multiple",
                 options: [
                     "Which bag is cheaper?",
                     "Which bag is bigger?",
@@ -739,16 +786,17 @@
             },
             {
                 unit: "Lesson 6",
-                situation: "장난감 코너에서 두 인형의 크기를 비교하고 있습니다. 노란 곰인형이 핑크 곰인형보다 더 작다는 문장을 완성해 보세요.",
+                situation: "장난감 코너에서 두 인형의 크기를 비교하고 있습니다. '더 작은'을 표현하는 단어를 영어 주관식으로 쓰세요.",
                 question: "The yellow bear is _______ than the pink bear.",
-                options: ["smaller", "small", "cheaper", "bigger"],
+                type: "subjective",
                 answer: "smaller",
-                hint: "두 대상을 비교하여 '더 작은'이라는 표현을 완성할 때는 뒤에 er을 붙인 'smaller'를 사용하고, ~보다라는 뜻인 'than'과 매칭하지."
+                hint: "작은은 small이고, 더 작은은 뒤에 er을 붙인 'smaller'로 표현한단다."
             },
             {
                 unit: "Lesson 6",
                 situation: "코끼리와 호랑이 중 어느 쪽이 더 무거운지 대화하고 있습니다. 알맞은 단어는?",
                 question: "A: Which animal is heavier?\nB: The elephant is _______ than the tiger.",
+                type: "multiple",
                 options: ["heavier", "heavy", "lighter", "faster"],
                 answer: "heavier",
                 hint: "코끼리가 호랑이보다 더 무거우므로 '더 무거운'을 의미하는 비교 어휘 'heavier'가 들어가야 정답이 된단다."
@@ -757,6 +805,7 @@
                 unit: "Lesson 6",
                 situation: "두 바지 길이를 비교하고 있습니다. 파란 바지가 검정 바지보다 더 길다는 올바른 문장을 고르세요.",
                 question: "Compare the pants:",
+                type: "multiple",
                 options: [
                     "The blue pants are longer than the black pants.",
                     "The blue pants are shorter than the black pants.",
@@ -768,7 +817,6 @@
             }
         ];
 
-        // Global variables for rankings fetched from Firebase
         let leaderboardData = [];
         let currentClassFilter = 'all';
         let currentSortOrder = 'time'; // 'time' or 'latest'
@@ -797,10 +845,12 @@
                     // Step 2: Establish Realtime database listener
                     listenToLeaderboard();
                 } catch (err) {
-                    console.error("Firebase init failed, running in sandbox mode:", err);
+                    console.error("Firebase init failed, running in hybrid local mode:", err);
+                    loadLeaderboardOffline();
                 }
             } else {
-                console.warn("No firebase configurations detected. Leaderboard will run offline.");
+                console.warn("No firebase configurations detected. Running hybrid local storage leaderboard.");
+                loadLeaderboardOffline();
             }
         }
 
@@ -822,18 +872,18 @@
             const nameInput = document.getElementById('input-name');
 
             if (!classSelect.value) {
-                alert("반을 먼저 선택해주세요!");
+                showNotification("반을 먼저 선택해주세요!", 'error');
                 classSelect.focus();
                 return;
             }
             if (!numberSelect.value) {
-                alert("번호를 먼저 선택해주세요!");
+                showNotification("번호를 먼저 선택해주세요!", 'error');
                 numberSelect.focus();
                 return;
             }
             studentName = nameInput.value.trim();
             if (!studentName || studentName.length < 2) {
-                alert("수료증에 기록될 자신의 실명을 정확하게 적어주세요! (최소 2자 이상)");
+                showNotification("수료증에 기록될 실명을 2자 이상 입력해주세요!", 'error');
                 nameInput.focus();
                 return;
             }
@@ -943,9 +993,9 @@
             }
         }
 
-        // RENDER REPETITIVE QUESTIONS
         function renderQuestion() {
             const q = shuffledQuestions[currentActiveIndex];
+            if (!q) return;
             
             // Set Progress bar
             const percent = ((currentActiveIndex) / shuffledQuestions.length) * 100;
@@ -964,34 +1014,88 @@
             const optContainer = document.getElementById('question-options-container');
             optContainer.innerHTML = "";
 
-            // Create shuffled options mapping
-            const originalOpts = [...q.options];
-            // Render
-            originalOpts.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left bg-slate-950 border border-slate-800 hover:border-emerald-500/50 p-3.5 rounded-xl text-xs hover:bg-slate-900 transition flex items-center justify-between group";
-                btn.onclick = () => checkAnswer(opt, btn);
-                btn.innerHTML = `
-                    <span>${opt}</span>
-                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-emerald-400 transition text-[10px]"></i>
-                `;
-                optContainer.appendChild(btn);
-            });
+            if (q.type === "subjective") {
+                // Render text input for subjective question
+                const inputGroup = document.createElement('div');
+                inputGroup.className = "space-y-3";
+                
+                const inputEl = document.createElement('input');
+                inputEl.type = "text";
+                inputEl.id = "subjective-answer-input";
+                inputEl.placeholder = q.hint ? `정답 입력 (힌트를 확인하세요)` : "영어 단어 정답 입력";
+                inputEl.className = "w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-center text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition text-lg font-bold uppercase tracking-wider";
+                
+                // Submit Button
+                const submitBtn = document.createElement('button');
+                submitBtn.className = "w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 py-3 rounded-xl font-game font-bold text-sm hover:brightness-110 active:scale-95 transition shadow shadow-emerald-500/10 flex items-center justify-center space-x-2";
+                submitBtn.innerHTML = `<span>정답 제출하기</span> <i class="fa-solid fa-paper-plane"></i>`;
+                submitBtn.onclick = () => {
+                    const typedVal = inputEl.value;
+                    checkAnswer(typedVal, inputEl, true);
+                };
+
+                // Add enter key listener
+                inputEl.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') {
+                        const typedVal = inputEl.value;
+                        checkAnswer(typedVal, inputEl, true);
+                    }
+                });
+
+                inputGroup.appendChild(inputEl);
+                inputGroup.appendChild(submitBtn);
+                optContainer.appendChild(inputGroup);
+                
+                // Auto focus
+                setTimeout(() => {
+                    inputEl.focus();
+                }, 100);
+
+            } else {
+                // Render multi choice buttons
+                const originalOpts = [...q.options];
+                originalOpts.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left bg-slate-950 border border-slate-800 hover:border-emerald-500/50 p-3.5 rounded-xl text-xs hover:bg-slate-900 transition flex items-center justify-between group";
+                    btn.onclick = () => checkAnswer(opt, btn, false);
+                    btn.innerHTML = `
+                        <span>${opt}</span>
+                        <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-emerald-400 transition text-[10px]"></i>
+                    `;
+                    optContainer.appendChild(btn);
+                });
+            }
         }
 
-        // VERIFY ANSWERS
-        function checkAnswer(selectedOption, buttonElement) {
+        // VERIFY ANSWERS (Supports both subjective and objective)
+        function checkAnswer(selectedOption, targetElement, isSubjective = false) {
             const q = shuffledQuestions[currentActiveIndex];
             const alertBanner = document.getElementById('answer-alert-banner');
             
-            if (selectedOption === q.answer) {
-                // Correct
+            let isCorrect = false;
+
+            if (isSubjective) {
+                // Strict trimming and case-insensitive check
+                const sanitizedInput = selectedOption.trim().toLowerCase();
+                const sanitizedAnswer = q.answer.trim().toLowerCase();
+                isCorrect = (sanitizedInput === sanitizedAnswer);
+            } else {
+                isCorrect = (selectedOption === q.answer);
+            }
+            
+            if (isCorrect) {
+                // Correct Flow
                 playSuccessSound();
-                buttonElement.className = "w-full text-left bg-emerald-950/40 border border-emerald-500 p-3.5 rounded-xl text-xs text-emerald-400 transition flex items-center justify-between";
-                buttonElement.innerHTML = `<span>${selectedOption}</span> <i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                if (isSubjective) {
+                    targetElement.className = "w-full bg-emerald-950/40 border border-emerald-500 rounded-xl px-4 py-3.5 text-center text-emerald-400 font-bold text-lg uppercase tracking-wider";
+                    targetElement.disabled = true;
+                } else {
+                    targetElement.className = "w-full text-left bg-emerald-950/40 border border-emerald-500 p-3.5 rounded-xl text-xs text-emerald-400 transition flex items-center justify-between";
+                    targetElement.innerHTML = `<span>${selectedOption}</span> <i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                }
                 
                 alertBanner.className = "mt-4 p-3 rounded-xl text-xs flex items-center space-x-2 bg-emerald-950/30 border border-emerald-500/30 text-emerald-300";
-                alertBanner.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>훌륭합니다! 정답입니다.</span>`;
+                alertBanner.innerHTML = `<i class="fa-solid fa-circle-check animate-bounce"></i> <span>훌륭합니다! 정답입니다. 다음 문제로 이동합니다!</span>`;
 
                 // Proceed next or decryption check
                 setTimeout(() => {
@@ -1022,7 +1126,7 @@
                         // Change question board into an notification
                         document.getElementById('puzzle-box').innerHTML = `
                             <div class="text-center py-10 space-y-4">
-                                <span class="text-5xl">🔐</span>
+                                <span class="text-5xl animate-bounce block">🔐</span>
                                 <h3 class="text-xl font-game text-yellow-400">24개 전구간의 아날로그 자물쇠 해독 완료!</h3>
                                 <p class="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
                                     대단합니다! 모든 융합복습 구간을 정복하셨습니다.<br>
@@ -1031,13 +1135,18 @@
                             </div>
                         `;
                     }
-                }, 1000);
+                }, 1200);
 
             } else {
-                // Incorrect
+                // Incorrect Flow
                 playFailSound();
-                buttonElement.className = "w-full text-left bg-rose-950/40 border border-rose-500 p-3.5 rounded-xl text-xs text-rose-400 transition flex items-center justify-between";
-                buttonElement.innerHTML = `<span>${selectedOption}</span> <i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                if (isSubjective) {
+                    targetElement.classList.add('border-rose-500', 'text-rose-400', 'animate-shake');
+                    setTimeout(() => targetElement.classList.remove('animate-shake'), 400);
+                } else {
+                    targetElement.className = "w-full text-left bg-rose-950/40 border border-rose-500 p-3.5 rounded-xl text-xs text-rose-400 transition flex items-center justify-between";
+                    targetElement.innerHTML = `<span>${selectedOption}</span> <i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                }
 
                 alertBanner.className = "mt-4 p-3 rounded-xl text-xs flex items-center space-x-2 bg-rose-950/30 border border-rose-500/30 text-rose-300 animate-bounce";
                 alertBanner.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>틀렸습니다! 우측의 Rebecca 쌤의 힌트 찬스를 써보세요.</span>`;
@@ -1112,7 +1221,7 @@
         async function submitEscapePin() {
             if (userEnteredCode.length < 6) {
                 playFailSound();
-                alert("6자리 암호를 모두 채워 넣어야 합니다!");
+                showNotification("6자리 암호를 모두 채워 넣어야 합니다!", 'error');
                 return;
             }
 
@@ -1133,51 +1242,108 @@
                 document.getElementById('screen-game').classList.add('hidden');
                 document.getElementById('screen-success').classList.remove('hidden');
 
-                // Save to Firestore leaderboard securely (Rule 1 & Rule 3)
+                // Save record both to Firestore cloud and Local Backup
                 await saveRecordToFirestore();
 
             } else {
                 playFailSound();
-                alert("삐빅! 보안 암호 키가 일치하지 않습니다! 해독 수첩을 참고하세요.");
+                showNotification("보안 암호 키가 일치하지 않습니다! Rebecca 쌤의 수첩을 다시 보세요.", 'error');
                 userEnteredCode = "";
                 updatePinDisplay();
             }
         }
 
-        // SAVE RECORD TO FIRESTORE CLOUD SECURELY
         async function saveRecordToFirestore() {
-            if (!db || !auth || !auth.currentUser) {
-                console.warn("Cloud connection offline. Record not saved online.");
-                return;
-            }
+            const localRecord = {
+                studentClass: studentClass,
+                studentNumber: parseInt(studentNumber),
+                studentName: studentName,
+                seconds: totalSecondsElapsed,
+                completedAt: { seconds: Math.floor(Date.now() / 1000) }
+            };
+
+            // Save to local storage first to guarantee survival of data
             try {
-                // Rule 1: Strictly structured public data path
-                const collectionRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
-                
-                const studentDocId = `${studentClass}_${studentNumber}_${auth.currentUser.uid.substring(0, 8)}`;
-                
-                await collectionRef.doc(studentDocId).set({
-                    studentClass: studentClass,
-                    studentNumber: parseInt(studentNumber),
-                    studentName: studentName,
-                    seconds: totalSecondsElapsed,
-                    completedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                console.log("Escape record synchronized securely with Cloud Firestore.");
+                let localArray = JSON.parse(localStorage.getItem('6th_escape_local_leaderboard') || '[]');
+                // Filter out any duplicates of the same student
+                localArray = localArray.filter(item => !(item.studentClass === studentClass && item.studentNumber === parseInt(studentNumber) && item.studentName === studentName));
+                localArray.push(localRecord);
+                localStorage.setItem('6th_escape_local_leaderboard', JSON.stringify(localArray));
+                console.log("Record saved locally in hybrid storage.");
             } catch (err) {
-                console.error("Failed to commit score to Firestore:", err);
+                console.error("Local storage save failed:", err);
+            }
+
+            // Attempt cloud sync if active
+            if (db && auth && auth.currentUser) {
+                try {
+                    const collectionRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+                    const studentDocId = `${studentClass}_${studentNumber}_${auth.currentUser.uid.substring(0, 8)}`;
+                    
+                    await collectionRef.doc(studentDocId).set({
+                        studentClass: studentClass,
+                        studentNumber: parseInt(studentNumber),
+                        studentName: studentName,
+                        seconds: totalSecondsElapsed,
+                        completedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    console.log("Escape record successfully synchronized to Firestore.");
+                } catch (err) {
+                    console.error("Cloud synchronization failed, running on offline storage:", err);
+                }
+            }
+
+            // Re-render immediately to update visual lists
+            loadLeaderboardOffline();
+        }
+
+        // HYBRID RETRIEVAL & OFFLINE MERGE SYSTEM (Exclusively using genuine student records)
+        function loadLeaderboardOffline() {
+            try {
+                const localArray = JSON.parse(localStorage.getItem('6th_escape_local_leaderboard') || '[]');
+                
+                // Initialize clean pool with zero mock competitor entries
+                let pool = [];
+
+                // Merge real cloud records if successfully fetched
+                if (leaderboardData && leaderboardData.length > 0) {
+                    leaderboardData.forEach(cloudItem => {
+                        const exists = pool.some(p => p.studentClass === cloudItem.studentClass && p.studentNumber === cloudItem.studentNumber && p.studentName === cloudItem.studentName);
+                        if (!exists) {
+                            pool.push(cloudItem);
+                        }
+                    });
+                }
+
+                // Merge local runs (highly prioritized for immediate feedback)
+                localArray.forEach(localItem => {
+                    const existsIndex = pool.findIndex(p => p.studentClass === localItem.studentClass && p.studentNumber === localItem.studentNumber && p.studentName === localItem.studentName);
+                    if (existsIndex !== -1) {
+                        // Replace older cloud records with updated local records if speed is better
+                        if (localItem.seconds < pool[existsIndex].seconds) {
+                            pool[existsIndex] = localItem;
+                        }
+                    } else {
+                        pool.push(localItem);
+                    }
+                });
+
+                // Trigger UI render using the authenticated student data only
+                renderLeaderboardUIWithPool(pool);
+
+            } catch (err) {
+                console.error("Failed to load and merge rankings:", err);
+                renderLeaderboardUIWithPool([]); // Fallback to empty clean slate
             }
         }
 
-        // REALTIME SUBSCRIPTION FOR THE LEADERBOARD SYSTEM (RULE 2 - Frontend filtering)
+        // REALTIME SUBSCRIPTION FOR THE LEADERBOARD SYSTEM (RULE 2)
         function listenToLeaderboard() {
             if (!db) return;
             try {
-                // Querying the standardized public path
                 const queryRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
                 
-                // Rule 2: Fetch raw documents and filter/sort in JavaScript to avoid composite index problems
                 queryRef.onSnapshot((snapshot) => {
                     leaderboardData = [];
                     snapshot.forEach(doc => {
@@ -1186,34 +1352,26 @@
                             ...doc.data()
                         });
                     });
-                    renderLeaderboardUI();
+                    // Refresh board dynamically
+                    loadLeaderboardOffline();
                 }, (error) => {
-                    console.error("Leaderboard subscription failed:", error);
+                    console.error("Leaderboard realtime connection error:", error);
+                    loadLeaderboardOffline();
                 });
             } catch (err) {
                 console.error("Firestore listening layout failed:", err);
+                loadLeaderboardOffline();
             }
         }
 
-        // FILTER & SORT LOGIC EXCLUSIVELY VIA JAVASCRIPT MEMORY (RULE 2 COMPLIANCE)
-        function renderLeaderboardUI() {
+        function renderLeaderboardUIWithPool(pool) {
             const listContainer = document.getElementById('leaderboard-ranking-list');
             if (!listContainer) return;
 
-            if (leaderboardData.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="text-center py-12 text-xs text-slate-500">
-                        <i class="fa-solid fa-ghost text-lg mb-2 block"></i>
-                        아직 탈출한 학생이 없습니다. 첫 번째 영광의 주인공이 되어보세요!
-                    </div>
-                `;
-                return;
-            }
-
             // Step 1: Filter by Class
-            let filtered = [...leaderboardData];
+            let filtered = [...pool];
             if (currentClassFilter !== 'all') {
-                filtered = filtered.filter(item => item.studentClass === currentClassFilter);
+                filtered = filtered.filter(item => String(item.studentClass) === String(currentClassFilter));
             }
 
             // Step 2: Sort exclusively in memory (Rule 2)
@@ -1223,7 +1381,6 @@
                     if (a.seconds !== b.seconds) {
                         return a.seconds - b.seconds;
                     }
-                    // if equal, latest completed first
                     return (b.completedAt?.seconds || 0) - (a.completedAt?.seconds || 0);
                 });
             } else {
@@ -1237,10 +1394,22 @@
 
             // Step 3: Render HTML UI
             listContainer.innerHTML = "";
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-16 text-xs text-slate-500 bg-slate-950/40 rounded-xl border border-slate-900">
+                        <i class="fa-solid fa-ghost text-slate-600 text-2xl mb-2 block animate-pulse"></i>
+                        아직 탈출 기록이 없습니다.<br>
+                        <span class="text-emerald-400 font-bold mt-1 inline-block">첫 번째 영광의 탈출 대원이 되어 보세요!</span>
+                    </div>
+                `;
+                return;
+            }
+
             filtered.forEach((item, index) => {
                 const mins = Math.floor(item.seconds / 60);
                 const secs = item.seconds % 60;
-                const activeUserHighlight = (studentName === item.studentName && studentClass === item.studentClass && parseInt(studentNumber) === item.studentNumber);
+                const activeUserHighlight = (studentName === item.studentName && String(studentClass) === String(item.studentClass) && parseInt(studentNumber) === parseInt(item.studentNumber));
 
                 const itemRow = document.createElement('div');
                 itemRow.className = `p-3 rounded-xl border flex items-center justify-between text-xs transition ${
@@ -1290,7 +1459,7 @@
                 timeBtn.className = "flex-1 py-1.5 rounded bg-slate-950 text-slate-400 font-game border border-slate-800";
                 latestBtn.className = "flex-1 py-1.5 rounded bg-blue-950 text-blue-300 font-game border border-blue-900";
             }
-            renderLeaderboardUI();
+            loadLeaderboardOffline();
         }
 
         function filterClass(cls) {
@@ -1305,14 +1474,14 @@
             if (activeTab) {
                 activeTab.className = "class-filter-tab px-3 py-1 rounded bg-blue-500 text-slate-950 font-bold";
             }
-            renderLeaderboardUI();
+            loadLeaderboardOffline();
         }
 
         // OPEN / CLOSE LEADERBOARD SCREEN MODALS
         function openLeaderboard() {
             playClickSound();
             document.getElementById('leaderboard-modal').classList.remove('hidden');
-            renderLeaderboardUI();
+            loadLeaderboardOffline();
         }
 
         function closeLeaderboard() {
@@ -1347,8 +1516,9 @@
                 if (nameInput) nameInput.value = localStorage.getItem('6th_escape_name_real');
             }
 
-            // Initialize connection with Firestore
+            // Initialize connection with Firestore & Hybrid Backups
             initFirebaseAndAuth();
+            loadLeaderboardOffline();
         };
     </script>
 </body>
