@@ -160,10 +160,10 @@
                 </button>
 
                 <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
-                    <button onclick="openLeaderboard()" class="text-blue-400 hover:underline flex items-center gap-1">
-                        <i class="fa-solid fa-chart-simple"></i> 실시간 탈출 현황판 보기
+                    <button onclick="requestLeaderboardAccess()" class="text-blue-400 hover:underline flex items-center gap-1">
+                        <i class="fa-solid fa-lock"></i> 📊 실시간 탈출 현황판 (교사용)
                     </button>
-                    <span class="text-slate-500">지능형 교육 컨텐츠</span>
+                    <span class="text-slate-500 font-digital">v1.2.Secure</span>
                 </div>
             </div>
         </div>
@@ -260,7 +260,7 @@
                 </div>
 
                 <!-- Escape Keypad Door Control -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                <div class="bg-slate-900 border border-slate-850 rounded-2xl p-5">
                     <div class="text-center mb-4">
                         <span class="text-2xl text-rose-500"><i class="fa-solid fa-door-closed"></i></span>
                         <h4 class="text-sm font-game text-slate-200 mt-2">중앙 비상 탈출구 키패드</h4>
@@ -334,7 +334,7 @@
                     <i class="fa-solid fa-print"></i>
                     <span>수료증 인쇄 / PDF 저장</span>
                 </button>
-                <button onclick="openLeaderboard()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl font-game font-bold text-sm transition flex items-center justify-center space-x-2">
+                <button onclick="requestLeaderboardAccess()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl font-game font-bold text-sm transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-chart-simple"></i>
                     <span>실시간 탈출 현황판</span>
                 </button>
@@ -363,6 +363,20 @@
         </div>
     </div>
 
+    <!-- TEACHER ACCESS VERIFICATION MODAL -->
+    <div id="teacher-auth-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-blue-500/50 rounded-2xl max-w-xs w-full p-6 neon-border-blue text-center">
+            <span class="text-3xl">🔑</span>
+            <h4 class="text-slate-200 font-game text-base mt-2">교사용 암호 확인</h4>
+            <p class="text-[10px] text-slate-500 mt-1 mb-4">현황판에 액세스하려면 비밀번호를 입력하세요.</p>
+            <input type="password" id="teacher-password-input" placeholder="비밀번호 입력" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 text-center text-sm focus:outline-none focus:border-blue-500 mb-4 font-mono">
+            <div class="flex gap-2">
+                <button onclick="closeTeacherAuth()" class="flex-1 bg-slate-800 text-slate-400 py-2 rounded-lg text-xs font-game">취소</button>
+                <button onclick="verifyTeacherAuth()" class="flex-1 bg-blue-500 text-slate-950 py-2 rounded-lg text-xs font-game font-bold">확인</button>
+            </div>
+        </div>
+    </div>
+
     <!-- LEADERBOARD SYSTEM MODAL -->
     <div id="leaderboard-modal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-blue-500/40 rounded-2xl max-w-2xl w-full p-6 neon-border-blue flex flex-col max-h-[85vh]">
@@ -371,12 +385,22 @@
                     <h4 class="text-blue-400 font-game flex items-center gap-2 text-lg">
                         <i class="fa-solid fa-chart-simple text-blue-400"></i> 실시간 탈출 현황판
                     </h4>
-                    <p class="text-[10px] text-slate-500">마법 영어교실을 무사히 빠져나간 친구들의 순위</p>
+                    <p class="text-[10px] text-slate-500">마법 영어교실을 탈출한 용감한 대원들의 실시간 순위</p>
                 </div>
                 <button onclick="closeLeaderboard()" class="text-slate-400 hover:text-slate-100"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Sort and class filtering tabs -->
+            <!-- Dashboard 2-Way Tab Bar: Overall vs Class-specific -->
+            <div class="grid grid-cols-2 gap-2 mb-4">
+                <button id="dashboard-tab-all" onclick="switchDashboardScope('all')" class="py-2 rounded-xl bg-blue-500 text-slate-950 font-game text-xs font-bold transition">
+                    🌐 전체 학생 종합 대시보드
+                </button>
+                <button id="dashboard-tab-class" onclick="switchDashboardScope('class')" class="py-2 rounded-xl bg-slate-950 text-slate-400 font-game text-xs transition border border-slate-800">
+                    🏫 반별 상세 현황 필터
+                </button>
+            </div>
+
+            <!-- Options: Sort order and detailed class tabs (displayed depending on scope) -->
             <div class="space-y-3 mb-4">
                 <!-- Sort options -->
                 <div class="flex gap-2 text-xs">
@@ -387,14 +411,13 @@
                         🕒 최신 탈출 완료 순서
                     </button>
                 </div>
-                <!-- Class Filtering tabs -->
-                <div class="flex gap-1 overflow-x-auto pb-1 text-xs justify-between">
-                    <button onclick="filterClass('all')" class="class-filter-tab px-3 py-1 rounded bg-blue-500 text-slate-950 font-bold" id="class-filter-all">전체</button>
-                    <button onclick="filterClass('1')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-1">1반</button>
-                    <button onclick="filterClass('2')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-2">2반</button>
-                    <button onclick="filterClass('3')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-3">3반</button>
-                    <button onclick="filterClass('4')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-4">4반</button>
-                    <button onclick="filterClass('5')" class="class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400" id="class-filter-5">5반</button>
+                <!-- Class-specific tab selectors (hidden when 'Overall' is selected) -->
+                <div id="class-filter-container" class="hidden flex gap-1 overflow-x-auto pb-1 text-xs justify-between">
+                    <button onclick="filterClass('1')" class="class-filter-tab px-3 py-1.5 rounded bg-blue-500 text-slate-950 font-bold" id="class-filter-1">1반</button>
+                    <button onclick="filterClass('2')" class="class-filter-tab px-3 py-1.5 rounded bg-slate-950 text-slate-400" id="class-filter-2">2반</button>
+                    <button onclick="filterClass('3')" class="class-filter-tab px-3 py-1.5 rounded bg-slate-950 text-slate-400" id="class-filter-3">3반</button>
+                    <button onclick="filterClass('4')" class="class-filter-tab px-3 py-1.5 rounded bg-slate-950 text-slate-400" id="class-filter-4">4반</button>
+                    <button onclick="filterClass('5')" class="class-filter-tab px-3 py-1.5 rounded bg-slate-950 text-slate-400" id="class-filter-5">5반</button>
                 </div>
             </div>
 
@@ -403,9 +426,21 @@
                 <div class="text-center text-xs text-slate-500 py-12">로딩 중이거나 아직 탈출한 기록이 없습니다.</div>
             </div>
 
-            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500">
-                <span>* Firebase Firestore 및 실시간 동기화 지원</span>
-                <button onclick="closeLeaderboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-1.5 rounded font-game">닫기</button>
+            <!-- Teacher Admin Control Tools inside Leaderboard -->
+            <div class="mt-4 pt-3 border-t border-slate-800 bg-slate-950/50 p-3 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-bold text-rose-400 font-game"><i class="fa-solid fa-triangle-exclamation"></i> 교사용 현황판 제어 도구:</span>
+                </div>
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <button onclick="triggerResetBoard()" class="w-full sm:w-auto bg-rose-950/60 hover:bg-rose-600 hover:text-slate-950 text-rose-300 px-4 py-2 rounded-lg text-xs font-game font-bold border border-rose-900 transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i> 현황판 전체 기록 리셋
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3 flex justify-between items-center text-[10px] text-slate-500">
+                <span>* Firebase Cloud Sync & Teacher Only Authorized Access</span>
+                <button onclick="closeLeaderboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-1.5 rounded font-game">현황판 닫기</button>
             </div>
         </div>
     </div>
@@ -438,6 +473,9 @@
         // Escape Timer Variables
         let timerInterval = null;
         let totalSecondsElapsed = 0;
+
+        // Dashboard filtering configurations
+        let dashboardScope = 'all'; // 'all' (Overall dashboard) or 'class' (Class filtering mode)
 
         // SOUND SYSTEM IMPLEMENTATION USING WEB AUDIO API
         let audioCtx = null;
@@ -480,6 +518,7 @@
             }
         }
 
+        // SFX Players
         function playClickSound() { playSound(650, 'sine', 0.08); }
         
         function playSuccessSound() {
@@ -532,7 +571,6 @@
         }
 
         // COMPLETE 24 QUESTIONS COMPRISING 1-6 UNITS (4 questions per unit, Mix of Choice & Write)
-        // Strictly conceptual comprehension and situational dialog - NO structural/syntactical description questions
         const EXAM_POOL = [
             // UNIT 1: What Grade Are You In? (학년 묻기)
             {
@@ -794,7 +832,7 @@
 
         // Global variables for rankings fetched from Firebase
         let leaderboardData = [];
-        let currentClassFilter = 'all';
+        let currentClassFilter = '1'; // Default class selected when Class filter is active
         let currentSortOrder = 'time'; // 'time' or 'latest'
 
         // FIREBASE SETUP WITH PRESET RUNTIME GLOBAL VARS
@@ -968,7 +1006,7 @@
             }
         }
 
-        // RENDER QUESTION (FIXED: Options are dynamically shuffled now)
+        // RENDER QUESTION
         function renderQuestion() {
             const q = shuffledQuestions[currentActiveIndex];
             
@@ -996,7 +1034,7 @@
 
                 displayOpts.forEach(opt => {
                     const btn = document.createElement('button');
-                    btn.className = "w-full text-left bg-slate-950 border border-slate-800 hover:border-emerald-500/50 p-3.5 rounded-xl text-xs hover:bg-slate-900 transition flex items-center justify-between group";
+                    btn.className = "w-full text-left bg-slate-950 border border-slate-850 hover:border-emerald-500/50 p-3.5 rounded-xl text-xs hover:bg-slate-900 transition flex items-center justify-between group";
                     btn.onclick = () => checkChoiceAnswer(opt, btn);
                     btn.innerHTML = `
                         <span>${opt}</span>
@@ -1345,9 +1383,9 @@
                 return;
             }
 
-            // Step 1: Filter by Class
+            // Step 1: Filter based on currently active dashboard scope and current class filter
             let filtered = [...leaderboardData];
-            if (currentClassFilter !== 'all') {
+            if (dashboardScope === 'class') {
                 filtered = filtered.filter(item => item.studentClass === currentClassFilter);
             }
 
@@ -1408,6 +1446,57 @@
             });
         }
 
+        // TEACHER SYSTEM ACCESS AUTHORIZATION
+        function requestLeaderboardAccess() {
+            playClickSound();
+            document.getElementById('teacher-auth-modal').classList.remove('hidden');
+            document.getElementById('teacher-password-input').value = "";
+            document.getElementById('teacher-password-input').focus();
+        }
+
+        // Close Auth
+        function closeTeacherAuth() {
+            playClickSound();
+            document.getElementById('teacher-auth-modal').classList.add('hidden');
+        }
+
+        // Verify Teacher (Fixed: Modified password verification strictly to "qwert" as requested)
+        function verifyTeacherAuth() {
+            const typedPw = document.getElementById('teacher-password-input').value;
+            if (typedPw === "qwert") {
+                // Access granted
+                playLevelUpSound();
+                document.getElementById('teacher-auth-modal').classList.add('hidden');
+                openLeaderboard();
+                showToast("선생님 권한 인증 완료! 대시보드를 표시합니다.", "success");
+            } else {
+                playFailSound();
+                showToast("비밀번호가 일치하지 않습니다!", "error");
+            }
+        }
+
+        // SWITCH DASHBOARD SCOPE: ALL VS CLASS-SPECIFIC
+        function switchDashboardScope(scope) {
+            playClickSound();
+            dashboardScope = scope;
+            
+            const btnAll = document.getElementById('dashboard-tab-all');
+            const btnClass = document.getElementById('dashboard-tab-class');
+            const classFilters = document.getElementById('class-filter-container');
+
+            if (scope === 'all') {
+                btnAll.className = "py-2 rounded-xl bg-blue-500 text-slate-950 font-game text-xs font-bold transition";
+                btnClass.className = "py-2 rounded-xl bg-slate-950 text-slate-400 font-game text-xs transition border border-slate-800";
+                classFilters.classList.add('hidden');
+            } else {
+                btnAll.className = "py-2 rounded-xl bg-slate-950 text-slate-400 font-game text-xs transition border border-slate-800";
+                btnClass.className = "py-2 rounded-xl bg-blue-500 text-slate-950 font-game text-xs font-bold transition";
+                classFilters.classList.remove('hidden');
+                filterClass(currentClassFilter); // Refresh with currently selected class filter
+            }
+            renderLeaderboardUI();
+        }
+
         // SWITCH LEADERBOARD VIEW CONTROLS
         function changeSortOrder(order) {
             playClickSound();
@@ -1431,18 +1520,51 @@
             currentClassFilter = cls;
             
             document.querySelectorAll('.class-filter-tab').forEach(tab => {
-                tab.className = "class-filter-tab px-2.5 py-1 rounded bg-slate-950 text-slate-400";
+                tab.className = "class-filter-tab px-3 py-1.5 rounded bg-slate-950 text-slate-400";
             });
             const activeTab = document.getElementById(`class-filter-${cls}`);
             if (activeTab) {
-                activeTab.className = "class-filter-tab px-3 py-1 rounded bg-blue-500 text-slate-950 font-bold";
+                activeTab.className = "class-filter-tab px-3 py-1.5 rounded bg-blue-500 text-slate-950 font-bold";
             }
+            renderLeaderboardUI();
+        }
+
+        // RESET ALL LEADERBOARD RECORD SYSTEM
+        async function triggerResetBoard() {
+            playClickSound();
+            const doubleCheck = confirm("정말로 현황판의 전체 탈출 기록을 초기화하시겠습니까?\n이 작업은 클라우드 및 모든 학생의 디바이스 기록을 삭제하며 복구할 수 없습니다.");
+            if (!doubleCheck) return;
+
+            // Step 1: Clear local localStorage storage
+            localStorage.removeItem('6th_escape_leaderboard_local');
+            leaderboardData = [];
+
+            // Step 2: Clear Firebase documents if connected
+            if (db) {
+                try {
+                    showToast("클라우드 기록을 초기화하는 중...", "success");
+                    const collectionRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+                    const snapshot = await collectionRef.get();
+                    
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        batch.delete(doc.ref);
+                    });
+                    await batch.commit();
+                    showToast("현황판 기록이 모두 무사히 리셋되었습니다!", "success");
+                } catch (err) {
+                    console.error("Firebase deletion failed:", err);
+                    showToast("클라우드 리셋 실패! 로컬 보드만 초기화되었습니다.", "error");
+                }
+            } else {
+                showToast("로컬 현황판 기록이 성공적으로 삭제되었습니다.", "success");
+            }
+
             renderLeaderboardUI();
         }
 
         // OPEN / CLOSE LEADERBOARD SCREEN MODALS
         function openLeaderboard() {
-            playClickSound();
             document.getElementById('leaderboard-modal').classList.remove('hidden');
             renderLeaderboardUI();
         }
